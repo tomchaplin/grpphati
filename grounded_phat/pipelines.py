@@ -1,11 +1,11 @@
-from grounded_phat.filtrations import ShortestPathFiltration, Filtration
-from grounded_phat.homology import (
+from .filtrations import ShortestPathFiltration, Filtration
+from .homology import (
     DirectedFlagComplexHomology,
     RegularPathHomology,
     Homology,
 )
-from grounded_phat.columns import convert_to_sparse
-from grounded_phat.diagram_utils import add_paired, add_unpaired
+from .columns import convert_to_sparse
+from .diagram_utils import add_paired, add_unpaired
 from typing import Type
 import phat
 import time
