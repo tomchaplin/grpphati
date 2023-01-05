@@ -2,6 +2,100 @@ from enum import Enum
 from dig_phat.columns import Column
 
 
+class Homology(Enum):
+    REG_PATH = 1
+    NONREG_PATH = 2
+    DFLAG = 3
+    TUPLES = 4
+
+    def get_cells(self, dimensions, filtration):
+        return [
+            cell for k in dimensions for cell in self._get_cells_in_dim(k, filtration)
+        ]
+
+    # Return cells in basis for k^th grounded chain group
+    # Along with the times at which they enter
+    def _get_cells_in_dim(self, dimension, filtration):  #
+        if dimension == 0:
+            return self.get_zero_cells(filtration)
+        elif dimension == 1:
+            return self.get_one_cells(filtration)
+        elif dimension == 2:
+            return self.get_two_cells(filtration)
+        else:
+            raise ValueError("get_cells only supports dimensions 0, 1, 2")
+
+    def get_zero_cells(self, filtration):
+        return [Column.NODE(node, 0) for node in filtration.G.nodes]
+
+    def get_one_cells(self, filtration):
+        return [Column.EDGE(edge, 0) for edge in filtration.G.edges] + [
+            Column.EDGE(edge, dist)
+            for edge, dist in filtration.edge_iter()
+            if not filtration.G.has_edge(*edge)
+        ]
+
+    def get_two_cells(self, filtration):
+        method_name = f"get_two_cells_{self.name}"
+        if hasattr(self, method_name) and callable(
+            getter_method := getattr(self, method_name)
+        ):
+            return getter_method(filtration)
+        else:
+            raise ValueError(f"get_two_cells does not support Homology.{self.name}")
+
+    def get_two_cells_REG_PATH(self, filtration):
+        two_paths = list(_sorted_two_paths(filtration))
+        (cols, bridges) = _split_off_bridges(filtration, two_paths)
+        cols = _add_ls_collapsing_directed_triangles(cols, bridges, filtration)
+        cols = _add_long_squares(cols, bridges)
+        return cols
+
+    def get_two_cells_DFLAG(self, filtration):
+        sp_lengths = filtration.edge_dict()
+        return [
+            Column.DIRECTED_TRIANGLE(
+                (source, midpoint, target),
+                max(first_hop_dist, second_hop_dist, filtration.time((source, target))),
+            )
+            for source, distances in sp_lengths.items()
+            for midpoint, first_hop_dist in distances.items()
+            for target, second_hop_dist in sp_lengths[midpoint].items()
+            if source != target
+        ]
+
+    def get_two_cells_TUPLES(self, filtration):
+        sp_lengths = filtration.edge_dict()
+        return [
+            Column.DIRECTED_TRIANGLE(
+                (source, midpoint, target),
+                max(first_hop_dist, second_hop_dist, filtration.time((source, target))),
+            )
+            if source != target
+            else Column.DOUBLE_EDGE(
+                (source, midpoint), max(first_hop_dist, second_hop_dist)
+            )
+            for source, distances in sp_lengths.items()
+            for midpoint, first_hop_dist in distances.items()
+            for target, second_hop_dist in sp_lengths[midpoint].items()
+        ]
+
+
+def _get_sorted_triangles(filtration):
+    sp_lengths = filtration.edge_dict()
+    paths = [
+        (
+            (source, midpoint, target),
+            max(first_hop_dist, second_hop_dist, filtration.time((source, target))),
+        )
+        for source, distances in sp_lengths.items()
+        for midpoint, first_hop_dist in distances.items()
+        for target, second_hop_dist in sp_lengths[midpoint].items()
+    ]
+    paths.sort(key=lambda tup: tup[1])
+    return paths
+
+
 def _sorted_two_paths(filtration):
     sp_lengths = filtration.edge_dict()
     paths = [
@@ -56,55 +150,3 @@ def _add_long_squares(cols, bridges):
                 )
             )
     return cols
-
-
-class Homology(Enum):
-    REG_PATH = 1
-    NONREG_PATH = 2
-    DFLAG = 3
-    TUPLES = 4
-
-    def get_cells(self, dimensions, filtration):
-        return [
-            cell
-            for k in dimensions
-            for cell in self._get_cells_in_dim(k, filtration)
-        ]
-
-    # Return cells in basis for k^th grounded chain group
-    # Along with the times at which they enter
-    def _get_cells_in_dim(self, dimension, filtration):  #
-        if dimension == 0:
-            return self.get_zero_cells(filtration)
-        elif dimension == 1:
-            return self.get_one_cells(filtration)
-        elif dimension == 2:
-            return self.get_two_cells(filtration)
-        else:
-            raise ValueError("get_cells only supports dimensions 0, 1, 2")
-
-    def get_zero_cells(self, filtration):
-        return [Column.NODE(node, 0) for node in filtration.G.nodes]
-
-    def get_one_cells(self, filtration):
-        return [Column.EDGE(edge, 0) for edge in filtration.G.edges] + [
-            Column.EDGE(edge, dist)
-            for edge, dist in filtration.edge_iter()
-            if not filtration.G.has_edge(*edge)
-        ]
-
-    def get_two_cells(self, filtration):
-        method_name = f"get_two_cells_{self.name}"
-        if hasattr(self, method_name) and callable(
-            getter_method := getattr(self, method_name)
-        ):
-            return getter_method(filtration)
-        else:
-            raise ValueError("get_two_cells does not support Homlogy.{self.name}")
-
-    def get_two_cells_REG_PATH(self, filtration):
-        two_paths = list(_sorted_two_paths(filtration))
-        (cols, bridges) = _split_off_bridges(filtration, two_paths)
-        cols = _add_ls_collapsing_directed_triangles(cols, bridges, filtration)
-        cols = _add_long_squares(cols, bridges)
-        return cols
