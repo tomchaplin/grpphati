@@ -3,18 +3,7 @@ import networkx as nx
 from abc import ABC, abstractmethod
 
 
-def _non_trivial_dict(sp_iter):
-    return {
-        source: {
-            target: distance
-            for target, distance in distances.items()
-            if target != source
-        }
-        for source, distances in sp_iter
-    }
-
-
-class AbstractFiltration(ABC):
+class Filtration(ABC):
     def __init__(self, G):
         self.G = G
 
@@ -31,7 +20,7 @@ class AbstractFiltration(ABC):
         pass
 
 
-class ShortestPathFiltration(AbstractFiltration):
+class ShortestPathFiltration(Filtration):
     def __init__(self, G):
         super().__init__(G)
         self.distances = _non_trivial_dict(nx.all_pairs_dijkstra_path_length(G))
@@ -52,3 +41,14 @@ class ShortestPathFiltration(AbstractFiltration):
 
     def edge_dict(self):
         return self.distances
+
+
+def _non_trivial_dict(sp_iter):
+    return {
+        source: {
+            target: distance
+            for target, distance in distances.items()
+            if target != source
+        }
+        for source, distances in sp_iter
+    }

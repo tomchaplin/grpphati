@@ -1,6 +1,6 @@
 import numpy as np
-from dig_phat.filtrations import ShortestPathFiltration
-from dig_phat.homology import RegularPathHomology
+from dig_phat.filtrations import ShortestPathFiltration, Filtration
+from dig_phat.homology import RegularPathHomology, Homology
 from dig_phat.columns import Column, convert_to_sparse
 from dig_phat.diagram_utils import add_paired, add_unpaired
 import phat
@@ -10,7 +10,11 @@ from pprint import pprint
 # TODO: Change filtration interface so that it will return a map of filtered edges
 # FOR NOW ASSUMES REG_PATH
 def grounded_ph(
-    G, filtration, homology, verbose=True, reduction=phat.reductions.twist_reduction
+    G,
+    filtration: Filtration,
+    homology: Homology,
+    verbose=True,
+    reduction: phat.reductions = phat.reductions.twist_reduction,
 ):
     ## Build boundary matrix
     if verbose:
@@ -49,7 +53,9 @@ def grounded_ph(
     return dgm
 
 
-def grpph(G, verbose=True, reduction=phat.reductions.twist_reduction):
+def grpph(
+    G, verbose=True, reduction: phat.reductions = phat.reductions.twist_reduction
+):
     return grounded_ph(
         G,
         ShortestPathFiltration(G),

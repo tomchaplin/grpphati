@@ -1,18 +1,19 @@
-from enum import Enum
 from dig_phat.columns import Column
+from dig_phat.filtrations import Filtration
 from abc import ABC, abstractmethod, abstractclassmethod
+
 
 class Homology(ABC):
     @classmethod
-    def get_cells(cls, dimensions, filtration):
+    def get_cells(cls, dimensions: list[int], filtration: Filtration):
         return [
             cell for k in dimensions for cell in cls._get_cells_in_dim(k, filtration)
         ]
-    
+
     # Return cells in basis for k^th grounded chain group
     # Along with the times at which they enter
     @classmethod
-    def _get_cells_in_dim(cls, dimension, filtration):  #
+    def _get_cells_in_dim(cls, dimension: int, filtration: Filtration):  #
         if dimension == 0:
             return cls.get_zero_cells(filtration)
         elif dimension == 1:
@@ -23,11 +24,11 @@ class Homology(ABC):
             raise ValueError("get_cells only supports dimensions 0, 1, 2")
 
     @classmethod
-    def get_zero_cells(cls, filtration):
+    def get_zero_cells(cls, filtration: Filtration):
         return [Column.NODE(node, 0) for node in filtration.G.nodes]
 
     @classmethod
-    def get_one_cells(cls, filtration):
+    def get_one_cells(cls, filtration: Filtration):
         return [Column.EDGE(edge, 0) for edge in filtration.G.edges] + [
             Column.EDGE(edge, dist)
             for edge, dist in filtration.edge_iter()
@@ -35,7 +36,7 @@ class Homology(ABC):
         ]
 
     @abstractclassmethod
-    def get_two_cells(cls, filtration):
+    def get_two_cells(cls, filtration: Filtration):
         pass
 
 
@@ -47,6 +48,7 @@ class RegularPathHomology(Homology):
         cols = _add_ls_collapsing_directed_triangles(cols, bridges, filtration)
         cols = _add_long_squares(cols, bridges)
         return cols
+
 
 class DirectedFlagComplexHomology(Homology):
     @classmethod
@@ -62,6 +64,7 @@ class DirectedFlagComplexHomology(Homology):
             for target, second_hop_dist in sp_lengths[midpoint].items()
             if source != target
         ]
+
 
 class OrderedTuplesHomology(Homology):
     @classmethod
@@ -126,6 +129,7 @@ def _split_off_bridges(filtration, paths):
                 bridges[(path[0], path[2])] = [(path[1], entrance_time)]
     return (cols, bridges)
 
+
 def _split_off_bridges_and_double_edges(filtration, paths):
     cols = []
     bridges = {}
@@ -143,7 +147,6 @@ def _split_off_bridges_and_double_edges(filtration, paths):
             except KeyError:
                 bridges[(path[0], path[2])] = [(path[1], entrance_time)]
     return (cols, bridges)
-
 
 
 def _add_ls_collapsing_directed_triangles(cols, bridges, filtration):
