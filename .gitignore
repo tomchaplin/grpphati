@@ -1,4 +1,2 @@
-deps
-data
-fig
 __pycache__
+pyrightconfig.json

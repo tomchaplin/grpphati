@@ -1,6 +1,6 @@
-from dig_phat.columns import Column
-from dig_phat.filtrations import Filtration
-from abc import ABC, abstractmethod, abstractclassmethod
+from grounded_phat.columns import Column
+from grounded_phat.filtrations import Filtration
+from abc import ABC, abstractclassmethod
 
 
 class Homology(ABC):
@@ -13,7 +13,7 @@ class Homology(ABC):
     # Return cells in basis for k^th grounded chain group
     # Along with the times at which they enter
     @classmethod
-    def _get_cells_in_dim(cls, dimension: int, filtration: Filtration):  #
+    def _get_cells_in_dim(cls, dimension: int, filtration: Filtration):
         if dimension == 0:
             return cls.get_zero_cells(filtration)
         elif dimension == 1:
@@ -85,21 +85,6 @@ class OrderedTuplesHomology(Homology):
         ]
 
 
-def _get_sorted_triangles(filtration):
-    sp_lengths = filtration.edge_dict()
-    paths = [
-        (
-            (source, midpoint, target),
-            max(first_hop_dist, second_hop_dist, filtration.time((source, target))),
-        )
-        for source, distances in sp_lengths.items()
-        for midpoint, first_hop_dist in distances.items()
-        for target, second_hop_dist in sp_lengths[midpoint].items()
-    ]
-    paths.sort(key=lambda tup: tup[1])
-    return paths
-
-
 def _sorted_two_paths(filtration):
     sp_lengths = filtration.edge_dict()
     paths = [
@@ -115,25 +100,6 @@ def _sorted_two_paths(filtration):
 def _split_off_bridges(filtration, paths):
     cols = []
     bridges = {}
-    for path, entrance_time in paths:
-        if path[0] == path[2]:
-            cols.append(Column.DOUBLE_EDGE((path[0], path[1]), entrance_time))
-        elif filtration.time((path[0], path[2])) <= entrance_time:
-            cols.append(
-                Column.DIRECTED_TRIANGLE((path[0], path[1], path[2]), entrance_time)
-            )
-        else:
-            try:
-                bridges[(path[0], path[2])].append((path[1], entrance_time))
-            except KeyError:
-                bridges[(path[0], path[2])] = [(path[1], entrance_time)]
-    return (cols, bridges)
-
-
-def _split_off_bridges_and_double_edges(filtration, paths):
-    cols = []
-    bridges = {}
-    double_edges = {}
     for path, entrance_time in paths:
         if path[0] == path[2]:
             cols.append(Column.DOUBLE_EDGE((path[0], path[1]), entrance_time))

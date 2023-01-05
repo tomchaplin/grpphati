@@ -1,19 +1,39 @@
-import numpy as np
-from dig_phat.filtrations import ShortestPathFiltration, Filtration
-from dig_phat.homology import RegularPathHomology, Homology
-from dig_phat.columns import Column, convert_to_sparse
-from dig_phat.diagram_utils import add_paired, add_unpaired
+from grounded_phat.filtrations import ShortestPathFiltration, Filtration
+from grounded_phat.homology import (
+    DirectedFlagComplexHomology,
+    RegularPathHomology,
+    Homology,
+)
+from grounded_phat.columns import convert_to_sparse
+from grounded_phat.diagram_utils import add_paired, add_unpaired
+from typing import Type
 import phat
 import time
-from pprint import pprint
 
-# TODO: Change filtration interface so that it will return a map of filtered edges
-# FOR NOW ASSUMES REG_PATH
+
+class GroundedPipeline:
+    def __init__(
+        self,
+        filtration_cls: Type[Filtration],
+        homology_cls: Type[Homology],
+        verbose: bool = False,
+        reduction: phat.reductions = phat.reductions.twist_reduction,
+    ):
+        self.filtration_cls = filtration_cls
+        self.homology_cls = homology_cls
+        self.verbose = verbose
+        self.reduction = reduction
+
+    def __call__(self, G):
+        filtration = self.filtration_cls(G)
+        dgm = grounded_ph(filtration, self.homology_cls, self.verbose, self.reduction)
+        return dgm
+
+
 def grounded_ph(
-    G,
     filtration: Filtration,
-    homology: Homology,
-    verbose=True,
+    homology: Type[Homology],
+    verbose: bool = False,
     reduction: phat.reductions = phat.reductions.twist_reduction,
 ):
     ## Build boundary matrix
@@ -53,13 +73,5 @@ def grounded_ph(
     return dgm
 
 
-def grpph(
-    G, verbose=True, reduction: phat.reductions = phat.reductions.twist_reduction
-):
-    return grounded_ph(
-        G,
-        ShortestPathFiltration(G),
-        RegularPathHomology,
-        verbose=verbose,
-        reduction=reduction,
-    )
+GrPPH = GroundedPipeline(ShortestPathFiltration, RegularPathHomology)
+GrPdFlH = GroundedPipeline(ShortestPathFiltration, DirectedFlagComplexHomology)
