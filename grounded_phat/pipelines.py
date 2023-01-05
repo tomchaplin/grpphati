@@ -1,4 +1,4 @@
-from .filtrations import ShortestPathFiltration, Filtration
+from .filtration import ShortestPathFiltration, Filtration
 from .homology import (
     DirectedFlagComplexHomology,
     RegularPathHomology,

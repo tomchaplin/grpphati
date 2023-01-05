@@ -1,5 +1,5 @@
 from abc import ABC, abstractclassmethod
-from grounded_phat.filtrations import Filtration
+from grounded_phat.filtration import Filtration
 from grounded_phat.column import NodeCol, EdgeCol
 
 
