@@ -1,6 +1,6 @@
 from abc import ABC, abstractclassmethod
 from grounded_phat.filtrations import Filtration
-from grounded_phat.columns import Column
+from grounded_phat.column import NodeCol, EdgeCol
 
 
 class Homology(ABC):
@@ -25,12 +25,12 @@ class Homology(ABC):
 
     @classmethod
     def get_zero_cells(cls, filtration: Filtration):
-        return [Column.NODE(node, 0) for node in filtration.G.nodes]
+        return [NodeCol(node, 0) for node in filtration.G.nodes]
 
     @classmethod
     def get_one_cells(cls, filtration: Filtration):
-        return [Column.EDGE(edge, 0) for edge in filtration.G.edges] + [
-            Column.EDGE(edge, dist)
+        return [EdgeCol(edge, 0) for edge in filtration.G.edges] + [
+            EdgeCol(edge, dist)
             for edge, dist in filtration.edge_iter()
             if not filtration.G.has_edge(*edge)
         ]

@@ -1,5 +1,5 @@
 from .abstract import Homology
-from grounded_phat.columns import Column
+from grounded_phat.column import DoubleEdgeCol, DirectedTriangleCol, LongSquareCol
 
 
 class RegularPathHomology(Homology):
@@ -29,11 +29,9 @@ def _split_off_bridges(filtration, paths):
     bridges = {}
     for path, entrance_time in paths:
         if path[0] == path[2]:
-            cols.append(Column.DOUBLE_EDGE((path[0], path[1]), entrance_time))
+            cols.append(DoubleEdgeCol((path[0], path[1]), entrance_time))
         elif filtration.time((path[0], path[2])) <= entrance_time:
-            cols.append(
-                Column.DIRECTED_TRIANGLE((path[0], path[1], path[2]), entrance_time)
-            )
+            cols.append(DirectedTriangleCol((path[0], path[1], path[2]), entrance_time))
         else:
             try:
                 bridges[(path[0], path[2])].append((path[1], entrance_time))
@@ -47,7 +45,7 @@ def _add_ls_collapsing_directed_triangles(cols, bridges, filtration):
         collapse_time = filtration.time(endpoints)
         # We add a directed triangle to collapse the first bridge to the shortcut between endpoints
         new_triangle = (endpoints[0], sub_bridges[0][0], endpoints[1])
-        cols.append(Column.DIRECTED_TRIANGLE((new_triangle), collapse_time))
+        cols.append(DirectedTriangleCol((new_triangle), collapse_time))
     return cols
 
 
@@ -60,8 +58,10 @@ def _add_long_squares(cols, bridges):
             second_bridge_node = sub_bridges[bridge_idx][0]
             entrance_time = sub_bridges[bridge_idx][1]
             cols.append(
-                Column.LONG_SQUARE(
-                    (endpoints[0], first_bridge_node, second_bridge_node, endpoints[1]),
+                LongSquareCol(
+                    endpoints[0],
+                    (first_bridge_node, second_bridge_node),
+                    endpoints[1],
                     entrance_time,
                 )
             )

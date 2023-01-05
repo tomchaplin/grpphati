@@ -1,5 +1,5 @@
 from .abstract import Homology
-from grounded_phat.columns import Column
+from grounded_phat.column import DirectedTriangleCol
 
 
 class DirectedFlagComplexHomology(Homology):
@@ -7,7 +7,7 @@ class DirectedFlagComplexHomology(Homology):
     def get_two_cells(cls, filtration):
         sp_lengths = filtration.edge_dict()
         return [
-            Column.DIRECTED_TRIANGLE(
+            DirectedTriangleCol(
                 (source, midpoint, target),
                 max(first_hop_dist, second_hop_dist, filtration.time((source, target))),
             )
