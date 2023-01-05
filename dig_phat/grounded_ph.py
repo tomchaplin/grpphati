@@ -1,6 +1,6 @@
 import numpy as np
 from dig_phat.filtrations import ShortestPathFiltration
-from dig_phat.homology import Homology
+from dig_phat.homology import RegularPathHomology
 from dig_phat.columns import Column, convert_to_sparse
 from dig_phat.diagram_utils import add_paired, add_unpaired
 import phat
@@ -53,7 +53,7 @@ def grpph(G, verbose=True, reduction=phat.reductions.twist_reduction):
     return grounded_ph(
         G,
         ShortestPathFiltration(G),
-        Homology.REG_PATH,
+        RegularPathHomology,
         verbose=verbose,
         reduction=reduction,
     )
