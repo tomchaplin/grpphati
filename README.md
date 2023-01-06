@@ -9,3 +9,6 @@
 7. Switch to and benchmark `bit_tree_pivot_column` representation
 8. Benchmark optimisations
 9. Type hints
+10. Test `_sparsify`; is it worthwhile to split the dictionaries on dimension?
+11. Write README and LICENSE
+12. Write `setup.py`
