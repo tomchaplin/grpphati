@@ -100,4 +100,19 @@ print(elap)
 (out, elap) = timed(lambda: GrPPH_slow(G5))
 print(out)
 print(elap)
-print(" ")
+
+print("--> G6")
+G6_1 = nx.relabel_nodes(
+    nx.complete_graph(100, create_using=nx.DiGraph), lambda x: (x, 1) if x > 0 else x
+)
+G6_2 = nx.relabel_nodes(
+    nx.complete_graph(100, create_using=nx.DiGraph), lambda x: (x, 2) if x > 0 else x
+)
+G6 = nx.compose(G6_1, G6_2)
+print(G6.number_of_nodes())
+(out, elap) = timed(lambda: GrPPH(G6))
+print(len(out))
+print(elap)
+(out, elap) = timed(lambda: GrPPH_par_wedge(G6))
+print(len(out))
+print(elap)
