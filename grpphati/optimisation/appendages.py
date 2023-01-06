@@ -1,4 +1,4 @@
-from grounded_phat.util.graph import without_appendages
+from grpphati.util.graph import without_appendages
 
 
 def remove_appendages(pipeline):

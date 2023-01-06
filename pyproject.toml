@@ -1,0 +1,76 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "grpphati"
+description = 'PHAT implementation of the grounded pipeline and, in particular, GrPPH'
+readme = "README.md"
+requires-python = ">=3.7"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "Thomas Chaplin", email = "tomrchaplin@gmail.com" },
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Mathematics",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+    "networkx~=2.8.8",
+    "numpy~=1.24.1",
+    "joblib~=1.2.0",
+    "phat @ git+https://github.com/xoltar/phat"
+]
+dynamic = ["version"]
+
+[project.urls]
+Documentation = "https://github.com/tomchaplin/grpphati#readme"
+Issues = "https://github.com/tomchaplin/grpphati/issues"
+Source = "https://github.com/tomchaplin/grpphati"
+
+[tool.hatch.version]
+path = "grpphati/__about__.py"
+
+[tool.hatch.envs.default]
+dependencies = [
+  "pytest",
+  "pytest-cov",
+]
+
+[tool.hatch.envs.default.scripts]
+cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=grpphati --cov=tests {args}"
+no-cov = "cov --no-cov {args}"
+
+[[tool.hatch.envs.test.matrix]]
+python = ["37", "38", "39", "310", "311"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.coverage.run]
+branch = true
+parallel = true
+omit = [
+  "grpphati/__about__.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
+
+[tool.hatch.build.targets.sdist]
+
+[tool.hatch.build.targets.wheel]
