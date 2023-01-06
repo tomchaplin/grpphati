@@ -7,3 +7,5 @@
 5. Choose benchmark datasets
 6. Benchmark different reductions
 7. Switch to and benchmark `bit_tree_pivot_column` representation
+8. Benchmark optimisations
+9. Type hints

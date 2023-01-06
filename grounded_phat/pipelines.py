@@ -6,6 +6,7 @@ from .homology import (
 )
 from .util.column import convert_to_sparse
 from .util.diagram import add_paired, add_unpaired
+from .optimisation import all_optimisations, component_appendage_empty, component_empty
 from typing import Type
 import phat
 
@@ -15,13 +16,17 @@ def make_grounded_pipeline(
     homology_cls: Type[Homology],
     verbose: bool = False,
     reduction: phat.reductions = phat.reductions.twist_reduction,
+    optimisation_strat=None,
 ):
-    def pipeline(G, verbose=verbose, reduction=reduction):
+    def pipeline(G):
         filtration = filtration_cls(G)
         dgm = compute_grounded_ph(filtration, homology_cls, verbose, reduction)
         return dgm
 
-    return pipeline
+    if optimisation_strat is None:
+        return pipeline
+    else:
+        return optimisation_strat(pipeline)
 
 
 def compute_grounded_ph(
@@ -62,5 +67,16 @@ def compute_grounded_ph(
     return dgm
 
 
-GrPPH = make_grounded_pipeline(ShortestPathFiltration, RegularPathHomology)
-GrPdFlH = make_grounded_pipeline(ShortestPathFiltration, DirectedFlagComplexHomology)
+GrPPH = make_grounded_pipeline(
+    ShortestPathFiltration,
+    RegularPathHomology,
+    optimisation_strat=component_appendage_empty,
+)
+GrPPH_par_wedge = make_grounded_pipeline(
+    ShortestPathFiltration, RegularPathHomology, optimisation_strat=all_optimisations
+)
+GrPdFlH = make_grounded_pipeline(
+    ShortestPathFiltration,
+    DirectedFlagComplexHomology,
+    optimisation_strat=component_empty,
+)

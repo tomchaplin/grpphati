@@ -7,6 +7,7 @@ name = "pypi"
 networkx = "*"
 numpy = "*"
 phat = {editable = true, git = "https://github.com/xoltar/phat"}
+joblib = "*"
 
 [dev-packages]
 pipenv-setup = {extras = ["black"], version = "*"}
