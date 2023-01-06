@@ -10,28 +10,21 @@ from typing import Type
 import phat
 
 
-class GroundedPipeline:
-    def __init__(
-        self,
-        filtration_cls: Type[Filtration],
-        homology_cls: Type[Homology],
-        verbose: bool = False,
-        reduction: phat.reductions = phat.reductions.twist_reduction,
-    ):
-        self.filtration_cls = filtration_cls
-        self.homology_cls = homology_cls
-        self.verbose = verbose
-        self.reduction = reduction
-
-    def __call__(self, G, verbose=None, reduction=None):
-        verbose = self.verbose if verbose is None else verbose
-        reduction = self.reduction if reduction is None else reduction
-        filtration = self.filtration_cls(G)
-        dgm = grounded_ph(filtration, self.homology_cls, verbose, reduction)
+def make_grounded_pipeline(
+    filtration_cls: Type[Filtration],
+    homology_cls: Type[Homology],
+    verbose: bool = False,
+    reduction: phat.reductions = phat.reductions.twist_reduction,
+):
+    def pipeline(G, verbose=verbose, reduction=reduction):
+        filtration = filtration_cls(G)
+        dgm = compute_grounded_ph(filtration, homology_cls, verbose, reduction)
         return dgm
 
+    return pipeline
 
-def grounded_ph(
+
+def compute_grounded_ph(
     filtration: Filtration,
     homology: Type[Homology],
     verbose: bool = False,
@@ -69,5 +62,5 @@ def grounded_ph(
     return dgm
 
 
-GrPPH = GroundedPipeline(ShortestPathFiltration, RegularPathHomology)
-GrPdFlH = GroundedPipeline(ShortestPathFiltration, DirectedFlagComplexHomology)
+GrPPH = make_grounded_pipeline(ShortestPathFiltration, RegularPathHomology)
+GrPdFlH = make_grounded_pipeline(ShortestPathFiltration, DirectedFlagComplexHomology)
