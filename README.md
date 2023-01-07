@@ -1,3 +1,23 @@
+# grpphati
+
+<div align="center">
+
+<img src="https://raw.githubusercontent.com/tomchaplin/grpphati/main/docs/assets/logo.png" alt="Grpphati logo" width="500" role="img">
+
+</div>
+
+`grphhati` is a __gr__ounded __p__ipleine __PHAT__ __i__mplementation.
+
+## Overview
+
+## Installation
+
+## Basic Usage
+
+## Advance Usage
+
+## Contributing
+
 ## TODO
 
 1. Implement non-regular path homology
