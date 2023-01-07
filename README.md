@@ -1,12 +1,14 @@
-# grpphati
-
 <div align="center">
 
-<img src="https://github.com/tomchaplin/grpphati/raw/main/docs/assets/logo.png" alt="Grpphati logo" width="500" role="img">
+<img src="https://github.com/tomchaplin/grpphati/raw/main/docs/assets/logo.png" alt="Grpphati logo" width="300" role="img">
+
+<h1>GrPPHATI</h1>
+
+is a <b>Gr</b>ounded <b>P</b>ipleine <b>PHAT</b> <b>I</b>mplementation.
 
 </div>
 
-`grphhati` is a __gr__ounded __p__ipleine __PHAT__ __i__mplementation.
+
 
 ## Overview
 
