@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/tomchaplin/grpphati/main/docs/assets/logo.png" alt="Grpphati logo" width="500" role="img">
+<img src="https://github.com/tomchaplin/grpphati/raw/main/docs/assets/logo.png" alt="Grpphati logo" width="500" role="img">
 
 </div>
 
