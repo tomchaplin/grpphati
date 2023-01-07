@@ -1,13 +1,13 @@
 import networkx as nx
 import time
-from grounded_phat.pipelines import (
+from grpphati.pipelines import (
     GrPPH,
     GrPPH_par_wedge,
     GrPdFlH,
     make_grounded_pipeline,
 )
-from grounded_phat.homology import RegularPathHomology
-from grounded_phat.filtration import ShortestPathFiltration
+from grpphati.homology import RegularPathHomology
+from grpphati.filtration import ShortestPathFiltration
 
 GrPPH_slow = make_grounded_pipeline(ShortestPathFiltration, RegularPathHomology)
 

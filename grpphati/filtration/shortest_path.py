@@ -1,19 +1,25 @@
 import numpy as np
 import networkx as nx
-from .abstract import Filtration
+from .abstract import Filtration, StandardGroundedFiltration
 
 
 class ShortestPathFiltration(Filtration):
     def __init__(self, G):
-        super().__init__(G)
+        self.nodes = G.nodes
         self.distances = _non_trivial_dict(nx.all_pairs_dijkstra_path_length(G))
 
-    def time(self, edge):
+    def node_time(self, node):
+        return 0
+
+    def edge_time(self, edge):
         try:
             return self.distances[edge[0]][edge[1]]
         except KeyError:
             # No path so never enters
             return np.inf
+
+    def node_iter(self):
+        return [(node, 0) for node in self.nodes]
 
     def edge_iter(self):
         return [
@@ -24,6 +30,19 @@ class ShortestPathFiltration(Filtration):
 
     def edge_dict(self):
         return self.distances
+
+    def ground(self, grounding_G):
+        return GroundedShortestPathFiltration(grounding_G, self)
+
+
+# Assumes that filtration = ShortestPathFiltration(G)
+# Overriding node methods becuase we know the node set is always V(G)
+class GroundedShortestPathFiltration(StandardGroundedFiltration):
+    def node_time(self, node):
+        return 0
+
+    def node_iter(self):
+        return self.filtration.node_iter()
 
 
 def _non_trivial_dict(sp_iter):

@@ -9,7 +9,11 @@ class OrderedTuplesHomology(Homology):
         return [
             DirectedTriangleCol(
                 (source, midpoint, target),
-                max(first_hop_dist, second_hop_dist, filtration.time((source, target))),
+                max(
+                    first_hop_dist,
+                    second_hop_dist,
+                    filtration.edge_time((source, target)),
+                ),
             )
             if source != target
             else DoubleEdgeCol((source, midpoint), max(first_hop_dist, second_hop_dist))

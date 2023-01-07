@@ -30,7 +30,7 @@ def _split_off_bridges(filtration, paths):
     for path, entrance_time in paths:
         if path[0] == path[2]:
             cols.append(DoubleEdgeCol((path[0], path[1]), entrance_time))
-        elif filtration.time((path[0], path[2])) <= entrance_time:
+        elif filtration.edge_time((path[0], path[2])) <= entrance_time:
             cols.append(DirectedTriangleCol((path[0], path[1], path[2]), entrance_time))
         else:
             try:
@@ -42,7 +42,7 @@ def _split_off_bridges(filtration, paths):
 
 def _add_ls_collapsing_directed_triangles(cols, bridges, filtration):
     for endpoints, sub_bridges in bridges.items():
-        collapse_time = filtration.time(endpoints)
+        collapse_time = filtration.edge_time(endpoints)
         # We add a directed triangle to collapse the first bridge to the shortcut between endpoints
         new_triangle = (endpoints[0], sub_bridges[0][0], endpoints[1])
         cols.append(DirectedTriangleCol((new_triangle), collapse_time))

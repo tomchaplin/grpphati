@@ -25,15 +25,11 @@ class Homology(ABC):
 
     @classmethod
     def get_zero_cells(cls, filtration: Filtration):
-        return [NodeCol(node, 0) for node in filtration.G.nodes]
+        return [NodeCol(node, time) for node, time in filtration.node_iter()]
 
     @classmethod
     def get_one_cells(cls, filtration: Filtration):
-        return [EdgeCol(edge, 0) for edge in filtration.G.edges] + [
-            EdgeCol(edge, dist)
-            for edge, dist in filtration.edge_iter()
-            if not filtration.G.has_edge(*edge)
-        ]
+        return [EdgeCol(edge, time) for edge, time in filtration.edge_iter()]
 
     @abstractclassmethod
     def get_two_cells(cls, filtration: Filtration):

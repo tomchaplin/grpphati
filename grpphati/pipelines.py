@@ -1,4 +1,4 @@
-from .filtration import ShortestPathFiltration, Filtration
+from .filtration import ShortestPathFiltration
 from .homology import (
     DirectedFlagComplexHomology,
     RegularPathHomology,
@@ -12,15 +12,14 @@ import phat
 
 
 def make_grounded_pipeline(
-    filtration_cls: Type[Filtration],
+    filtration_map,
     homology_cls: Type[Homology],
     verbose: bool = False,
     reduction: phat.reductions = phat.reductions.twist_reduction,
     optimisation_strat=None,
 ):
     def pipeline(G):
-        filtration = filtration_cls(G)
-        dgm = compute_grounded_ph(filtration, homology_cls, verbose, reduction)
+        dgm = compute_grounded_ph(G, filtration_map, homology_cls, verbose, reduction)
         return dgm
 
     if optimisation_strat is None:
@@ -30,15 +29,20 @@ def make_grounded_pipeline(
 
 
 def compute_grounded_ph(
-    filtration: Filtration,
+    G,
+    filtration_map,
     homology: Type[Homology],
     verbose: bool = False,
     reduction: phat.reductions = phat.reductions.twist_reduction,
 ):
+    filtration = filtration_map(G)
+    grounded_filtration = filtration.ground(G)
     # Build boundary matrix
     if verbose:
         print("Building boundary matrix")
-    cols = homology.get_cells([0, 1, 2], filtration)
+    cols = homology.get_cells([0, 1], grounded_filtration) + homology.get_cells(
+        [2], filtration
+    )
     if verbose:
         print(f"Filtration basis has size {len(cols)}")
     # Sort basis according to entrance time and dimension

@@ -9,7 +9,11 @@ class DirectedFlagComplexHomology(Homology):
         return [
             DirectedTriangleCol(
                 (source, midpoint, target),
-                max(first_hop_dist, second_hop_dist, filtration.time((source, target))),
+                max(
+                    first_hop_dist,
+                    second_hop_dist,
+                    filtration.edge_time((source, target)),
+                ),
             )
             for source, distances in sp_lengths.items()
             for midpoint, first_hop_dist in distances.items()
