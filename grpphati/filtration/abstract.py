@@ -56,3 +56,6 @@ class StandardGroundedFiltration(Filtration):
         for i, j in self.G.edges:
             filtration_dict[i][j] = 0
         return filtration_dict
+
+    def ground(self, grounding_G):
+        raise Exception("Attempted to ground an already grounded filtration")

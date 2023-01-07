@@ -100,6 +100,7 @@ print(elap)
 (out, elap) = timed(lambda: GrPPH_slow(G5))
 print(out)
 print(elap)
+print(" ")
 
 print("--> G6")
 G6_1 = nx.relabel_nodes(

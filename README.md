@@ -12,3 +12,4 @@
 10. Test `_sparsify`; is it worthwhile to split the dictionaries on dimension?
 11. Write README and LICENSE
 12. Write `setup.py`
+13. Figure out problem with leaked objects
