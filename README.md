@@ -24,7 +24,7 @@ Due to issues with the `pypi` packaging of `phat`, `grpphati` is currently not a
 Instead, please install as a direct reference to the repository:
 
 ```
-$ pip install https://github.com/tomchaplin/grpphati.git
+$ pip install git+https://github.com/tomchaplin/grpphati.git
 ```
 
 > **Warning**
