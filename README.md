@@ -65,22 +65,19 @@ $ python test.py
 
 ### Homology
 
-## Contributing
-
 ## TODO
 
 - [ ] Implement non-regular path homology
-- [ ] Implement vertex-based and edge-based filtrations
 - [ ] Improve performance of sparse matrix construction?
-- [ ] Write test
+- [ ] Write tests
 - [ ] Choose benchmark datasets
 - [ ] Benchmark different reductions
 - [ ] Switch to and benchmark `bit_tree_pivot_column` representation
 - [ ] Benchmark optimisations
-- [ ] Type hints
+- [ ] Add type hints
+- [ ] Add docstrings
 - [ ] Test `_sparsify`; is it worthwhile to split the dictionaries on dimension?
 - [ ] Write README and LICENSE
-- [ ] Write `setup.py`
 - [ ] Figure out problem with leaked objects
 
 ## References
