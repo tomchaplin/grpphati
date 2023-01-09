@@ -20,7 +20,7 @@ GrPPHATI builds the boundary matrix in Python, converts it into a sparse format 
 
 ## Installation
 
-Due to [issues](https://github.com/xoltar/phat/issues/4) with the `pypi` packaging of `phat`, `grpphati` is currently not available as a `pypi` package.
+Due to [issues](https://github.com/xoltar/phat/issues/4) with the PyPI packaging of `phat`, GrPPHATI is currently not available as a PyPI package.
 Instead, please install as a direct reference to the repository:
 
 ```
@@ -127,7 +127,7 @@ The pipeline `PdFlH` combines directed flag complex homology with the shortest-p
 
 ## Advanced Usage
 
-As stated, `grpphati` is in fact a library for implementing instances of the grounded pipeline.
+GrPPHATI is in fact a library for implementing instances of the grounded pipeline.
 The main interface for is the function `make_grounded_pipeline` in the `grpphati.pipelines.grounded` module.
 The required arguments a filtration map and a homology class, which are explained further in the following sections.
 Additionally, you can specify the persistence algorithm via a `phat.reductions` and provide an optimisation strategy.
