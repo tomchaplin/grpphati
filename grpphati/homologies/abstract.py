@@ -5,7 +5,7 @@ from grpphati.columns import NodeCol, EdgeCol
 
 class Homology(ABC):
     @classmethod
-    def get_cells(cls, dimensions: list[int], filtration: Filtration):
+    def get_cells(cls, dimensions, filtration: Filtration):
         return [
             cell for k in dimensions for cell in cls._get_cells_in_dim(k, filtration)
         ]

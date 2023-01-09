@@ -178,6 +178,7 @@ For illustrative examples, see the contents of `grpphati.optimisations`.
 - [ ] Add docstrings
 - [ ] Test `_sparsify`; is it worthwhile to split the dictionaries on dimension?
 - [ ] Figure out problem with leaked objects
+- [ ] Separate out entrance times?
 
 ## References
 
