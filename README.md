@@ -66,7 +66,8 @@ The pipeline `GrPdFlH` does not use this optimisation as it may result in a diff
 Thanks to [[Theorem 4.21, 1]](#1), it is possible to paralellise the computation of GrPPH over wedge components.
 The pipeline `GrPPH_par_wedge` implementes this optimisation.
 If you expect that your input has a wedge decomposition, it is highly recommended to use this pipeline since it (a) parallelises the computation and (b) significantly reduces the number of allowed 2-paths.
-For example, consider the output of the following program, run on a Ryzen 5 3500U @2.1Ghz.
+For example, the following script computes the GrPPH of the wedge of two complete digraphs, each on 50 nodes.
+The output is from a laptop with a Ryzen 5 3500U @2.1GHz.
 
 ```python
 # test2.py
