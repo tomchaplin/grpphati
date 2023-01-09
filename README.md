@@ -20,7 +20,7 @@ GrPPHATI builds the boundary matrix in Python, converts it into a sparse format 
 
 ## Installation
 
-Due to issues with the `pypi` packaging of `phat`, `grpphati` is currently not available as a `pypi` package.
+Due to [issues](https://github.com/xoltar/phat/issues/4) with the `pypi` packaging of `phat`, `grpphati` is currently not available as a `pypi` package.
 Instead, please install as a direct reference to the repository:
 
 ```
@@ -39,7 +39,7 @@ All descriptors implemented in `grpphati` expect a `networkx.DiGraph` as input w
 
 ```python
 # test.py
-from grpphati.pipelines import GrPPH, GrPdFlH
+from grpphati.pipelines.grounded import GrPPH, GrPdFlH
 import networkx as nx
 
 G = nx.DiGraph()
@@ -56,14 +56,75 @@ $ python test.py
 [[0, 6]]
 ```
 
-
 ### Optimisations
+
+By default, all pipelines parallelise the computation over weakly connected components.
+
+In addition, `GrPPH` iteratively removes appendage edges before starting the computation.
+The pipeline `GrPdFlH` does not use this optimisation as it may result in a different barcode (e.g. [[Example A.13, 1]](#1)).
+
+Thanks to [[Theorem 4.21, 1]](#1), it is possible to paralellise the computation of GrPPH over wedge components.
+The pipeline `GrPPH_par_wedge` implementes this optimisation.
+If you expect that your input has a wedge decomposition, it is highly recommended to use this pipeline since it (a) parallelises the computation and (b) significantly reduces the number of allowed 2-paths.
+For example, consider the output of the following program, run on a Ryzen 5 3500U @2.1Ghz.
+
+```python
+# test2.py
+import networkx as nx
+import time
+from grpphati.pipelines.grounded import (
+    GrPPH,
+    GrPPH_par_wedge,
+)
+
+
+def timed(f):
+    tic = time.time()
+    output = f()
+    toc = time.time()
+    elapsed = toc - tic
+    return (output, elapsed)
+
+
+N = 50
+G6_1 = nx.relabel_nodes(
+    nx.complete_graph(50, create_using=nx.DiGraph), lambda x: (x, 1) if x > 0 else x
+)
+G6_2 = nx.relabel_nodes(
+    nx.complete_graph(50, create_using=nx.DiGraph), lambda x: (x, 2) if x > 0 else x
+)
+G6 = nx.compose(G6_1, G6_2)
+print(f"{G6.number_of_nodes()} nodes in wedge graph")
+
+(out, elap) = timed(lambda: GrPPH(G6))
+print("Serial:")
+print(f"Size of barcode = {len(out)}")
+print(f"Time elapsed = {elap}s")
+
+print("Parallel over wedges:")
+(out, elap) = timed(lambda: GrPPH_par_wedge(G6))
+print(f"Size of barcode = {len(out)}")
+print(f"Time elapsed = {elap}s")
+```
+
+```
+$ python test2.py
+99 nodes in wedge graph
+Serial:
+Size of barcode = 4802
+Time elapsed = 10.496055603027344s
+Parallel over wedges:
+Size of barcode = 4802
+Time elapsed = 2.702505111694336s
+```
 
 ## Advanced Usage
 
 ### Filtrations
 
 ### Homology
+
+### Optimisations
 
 ## TODO
 
