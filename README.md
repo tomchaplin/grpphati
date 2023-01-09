@@ -6,6 +6,12 @@
 
 is a <b>Gr</b>ounded <b>P</b>ipeline <b>PHAT</b> <b>I</b>mplementation.
 
+[Overview](https://www.tomchaplin.xyz/research/2022-10-25-grounded-persistent-path-homology/)
+•
+[arXiv](https://arxiv.org/abs/2210.11274)
+•
+[Google Colab](https://colab.research.google.com/drive/1WUuiShZcXGb8n8kxjIoRcybYEM5av31O?usp=sharing)
+   
 </div>
 
 ## Overview
@@ -19,6 +25,8 @@ GrPPHATI builds the boundary matrix in Python, converts it into a sparse format 
 > Due to its focus on GrPPH, this library only computes homology in degree 1.
 
 ## Installation
+
+To get started straight away, save a copy of [this Google Colab notebook](https://colab.research.google.com/drive/1WUuiShZcXGb8n8kxjIoRcybYEM5av31O?usp=sharing) to your drive.
 
 Due to [issues](https://github.com/xoltar/phat/issues/4) with the PyPI packaging of `phat`, GrPPHATI is currently not available as a PyPI package.
 Instead, please install as a direct reference to the repository:
@@ -94,16 +102,16 @@ G_1 = nx.relabel_nodes(
 G_2 = nx.relabel_nodes(
     nx.complete_graph(N, create_using=nx.DiGraph), lambda x: (x, 2) if x > 0 else x
 )
-G = nx.compose(G_1, G_2)
-print(f"{G.number_of_nodes()} nodes in wedge graph")
+G_wedge = nx.compose(G_1, G_2)
+print(f"{G_wedge.number_of_nodes()} nodes in wedge graph")
 
-(out, elap) = timed(lambda: GrPPH(G))
+(out, elap) = timed(lambda: GrPPH(G_wedge))
 print("Serial:")
 print(f"Size of barcode = {len(out)}")
 print(f"Time elapsed = {elap}s")
 
 print("Parallel over wedges:")
-(out, elap) = timed(lambda: GrPPH_par_wedge(G))
+(out, elap) = timed(lambda: GrPPH_par_wedge(G_wedge))
 print(f"Size of barcode = {len(out)}")
 print(f"Time elapsed = {elap}s")
 ```
