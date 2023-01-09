@@ -88,22 +88,22 @@ def timed(f):
 
 
 N = 50
-G6_1 = nx.relabel_nodes(
-    nx.complete_graph(50, create_using=nx.DiGraph), lambda x: (x, 1) if x > 0 else x
+G_1 = nx.relabel_nodes(
+    nx.complete_graph(N, create_using=nx.DiGraph), lambda x: (x, 1) if x > 0 else x
 )
-G6_2 = nx.relabel_nodes(
-    nx.complete_graph(50, create_using=nx.DiGraph), lambda x: (x, 2) if x > 0 else x
+G_2 = nx.relabel_nodes(
+    nx.complete_graph(N, create_using=nx.DiGraph), lambda x: (x, 2) if x > 0 else x
 )
-G6 = nx.compose(G6_1, G6_2)
-print(f"{G6.number_of_nodes()} nodes in wedge graph")
+G = nx.compose(G_1, G_2)
+print(f"{G.number_of_nodes()} nodes in wedge graph")
 
-(out, elap) = timed(lambda: GrPPH(G6))
+(out, elap) = timed(lambda: GrPPH(G))
 print("Serial:")
 print(f"Size of barcode = {len(out)}")
 print(f"Time elapsed = {elap}s")
 
 print("Parallel over wedges:")
-(out, elap) = timed(lambda: GrPPH_par_wedge(G6))
+(out, elap) = timed(lambda: GrPPH_par_wedge(G))
 print(f"Size of barcode = {len(out)}")
 print(f"Time elapsed = {elap}s")
 ```
