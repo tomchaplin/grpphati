@@ -59,3 +59,12 @@ class StandardGroundedFiltration(Filtration):
 
     def ground(self, grounding_G):
         raise Exception("Attempted to ground an already grounded filtration")
+
+
+# Useful when V(F^t G) \subseteq V(G)
+class ProperGroundedFiltration(StandardGroundedFiltration):
+    def node_time(self, node):
+        return 0
+
+    def node_iter(self):
+        return self.filtration.node_iter()

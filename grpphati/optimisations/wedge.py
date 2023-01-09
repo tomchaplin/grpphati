@@ -1,6 +1,6 @@
 import networkx as nx
 from joblib import Parallel, delayed
-from grpphati.util.graph import wedge_components
+from grpphati.utils.graph import wedge_components
 
 
 def parallel_over_wedges(pipeline, prefer=None, n_jobs=-1):

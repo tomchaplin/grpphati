@@ -1,6 +1,6 @@
 from abc import ABC, abstractclassmethod
-from grpphati.filtration import Filtration
-from grpphati.column import NodeCol, EdgeCol
+from grpphati.filtrations import Filtration
+from grpphati.columns import NodeCol, EdgeCol
 
 
 class Homology(ABC):

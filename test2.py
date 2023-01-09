@@ -1,13 +1,14 @@
 import networkx as nx
 import time
-from grpphati.pipelines import (
+from grpphati.pipelines.grounded import (
     GrPPH,
     GrPPH_par_wedge,
     GrPdFlH,
     make_grounded_pipeline,
 )
-from grpphati.homology import RegularPathHomology
-from grpphati.filtration import ShortestPathFiltration
+from grpphati.pipelines.standard import ( PPH, PdFlH )
+from grpphati.homologies import RegularPathHomology
+from grpphati.filtrations import ShortestPathFiltration
 
 GrPPH_slow = make_grounded_pipeline(ShortestPathFiltration, RegularPathHomology)
 
@@ -39,6 +40,8 @@ G1.add_edge(N + 3, N + 2)
 
 print(GrPPH(G1))
 print(GrPdFlH(G1))
+print(PPH(G1))
+print(PdFlH(G1))
 print(" ")
 
 print("--> G2")

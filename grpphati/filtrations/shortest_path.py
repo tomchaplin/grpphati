@@ -1,6 +1,6 @@
 import numpy as np
 import networkx as nx
-from .abstract import Filtration, StandardGroundedFiltration
+from .abstract import Filtration, ProperGroundedFiltration
 
 
 class ShortestPathFiltration(Filtration):
@@ -32,17 +32,7 @@ class ShortestPathFiltration(Filtration):
         return self.distances
 
     def ground(self, grounding_G):
-        return GroundedShortestPathFiltration(grounding_G, self)
-
-
-# Assumes that filtration = ShortestPathFiltration(G)
-# Overriding node methods becuase we know the node set is always V(G)
-class GroundedShortestPathFiltration(StandardGroundedFiltration):
-    def node_time(self, node):
-        return 0
-
-    def node_iter(self):
-        return self.filtration.node_iter()
+        return ProperGroundedFiltration(grounding_G, self)
 
 
 def _non_trivial_dict(sp_iter):

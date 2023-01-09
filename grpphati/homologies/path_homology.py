@@ -1,5 +1,5 @@
 from .abstract import Homology
-from grpphati.column import DoubleEdgeCol, DirectedTriangleCol, LongSquareCol
+from grpphati.columns import DoubleEdgeCol, DirectedTriangleCol, LongSquareCol
 
 
 class RegularPathHomology(Homology):

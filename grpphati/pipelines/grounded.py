@@ -1,12 +1,16 @@
-from .filtration import ShortestPathFiltration
-from .homology import (
+from grpphati.filtrations import ShortestPathFiltration
+from grpphati.homologies import (
     DirectedFlagComplexHomology,
     RegularPathHomology,
     Homology,
 )
-from .util.column import convert_to_sparse
-from .util.diagram import add_paired, add_unpaired
-from .optimisation import all_optimisations, component_appendage_empty, component_empty
+from grpphati.utils.column import convert_to_sparse
+from grpphati.utils.diagram import add_paired, add_unpaired
+from grpphati.optimisations import (
+    all_optimisations,
+    component_appendage_empty,
+    component_empty,
+)
 from typing import Type
 import phat
 
