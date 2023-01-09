@@ -18,6 +18,6 @@ def parallel_over_wedges(pipeline, prefer=None, n_jobs=-1):
         elif len(comps) == 0:
             return []
         else:
-            return run_pipeline_on_component(comps[1])
+            return run_pipeline_on_component(comps[0])
 
     return new_pipeline
