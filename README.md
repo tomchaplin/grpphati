@@ -151,8 +151,14 @@ If $V(F^t G) \subseteq V(G)$ for all $t$ then `ProperGroundedFiltration` provide
 
 To specify your homology theory, implement a subclass of `grpphati.homologies.Homology`.
 The key methods to implement are the `get_<k>_cells(self, filtration)`.
-For a given $k$, the method should return an iterator of `(column, entrance_time)` tuples where `column` is a column that appears in the boundary matrix.
+For a given $k$, the method should return an iterator of columns in the boundary matrix.
 For most digraph homology theories, you should only need to implement `get_two_cells`.
+
+In order to implement your homology theory, you may need to implement new column types.
+These column types should be subclasses of `grpphati.column.Column`.
+A column object should encapsulate its `entrance_time`, as this will be needed for sorting the columns of the boundary matrix.
+However, you should implement `__eq__` and `__hash__` so that columns representing the same basis are equal, regardless of entrance time.
+This allows `convert_to_sparse` to lookup the index of each column when sparsifying the boundary matrix.
 
 ### Optimisations
 
