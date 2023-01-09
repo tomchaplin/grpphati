@@ -34,7 +34,7 @@ $ pip install git+https://github.com/tomchaplin/grpphati.git
 
 ## Basic Usage
 
-The quickest way to get started is to use the defeault implementation of GrPPH or GrPdFlH.
+The quickest way to get started is to use the default implementation of GrPPH or GrPdFlH.
 All descriptors implemented in `grpphati` expect a `networkx.DiGraph` as input with the edge-weights stored in the `weight` attribute.
 
 ```python
@@ -63,8 +63,8 @@ By default, all pipelines parallelise the computation over weakly connected comp
 In addition, `GrPPH` iteratively removes appendage edges before starting the computation.
 The pipeline `GrPdFlH` does not use this optimisation as it may result in a different barcode (e.g. [[Example A.13, 1]](#1)).
 
-Thanks to [[Theorem 4.21, 1]](#1), it is possible to paralellise the computation of GrPPH over wedge components.
-The pipeline `GrPPH_par_wedge` implementes this optimisation.
+Thanks to [[Theorem 4.21, 1]](#1), it is possible to parallelise the computation of GrPPH over wedge components.
+The pipeline `GrPPH_par_wedge` implements this optimisation.
 If you expect that your input has a wedge decomposition, it is highly recommended to use this pipeline since it (a) parallelises the computation and (b) significantly reduces the number of allowed 2-paths.
 For example, the following script computes the GrPPH of the wedge of two complete digraphs, each on 50 nodes.
 The output is from a laptop with a Ryzen 5 3500U @2.1GHz.
@@ -119,13 +119,45 @@ Size of barcode = 4802
 Time elapsed = 2.702505111694336s
 ```
 
+### Standard pipelines
+
+For ease of comparison, we also provide implementations of the standard pipelines in `grpphati.pipelines.standard`.
+The pipeline `PPH` combines path homology with the shortest-path filtration (`PPH_par_wedge` parallelises over wedges).
+The pipeline `PdFlH` combines directed flag complex homology with the shortest-path filtration.
+
 ## Advanced Usage
+
+As stated, `grpphati` is in fact a library for implementing instances of the grounded pipeline.
+The main interface for is the function `make_grounded_pipeline` in the `grpphati.pipelines.grounded` module.
+The required arguments a filtration map and a homology class, which are explained further in the following sections.
+Additionally, you can specify the persistence algorithm via a `phat.reductions` and provide an optimisation strategy.
+The function returns a 'pipeline' which accepts a `nx.DiGraph` and returns the barcode.
+
+The function `make_standard_pipeline` in `grpphati.pipelines.standard` has the same interface and returns the standard pipeline.
 
 ### Filtrations
 
+A filtration map should except a `nx.DiGraph` and return a `grpphati.filtrations.Filtration`.
+To specify a custom filtration, simply implement a subclass of `Filtration`, implementing all abstract methods.
+The main methods describing the filtration are `node_iter` and `edge_iter` which return an iterator of `(node/edge, entrance_time)` tuples.
+See the implementation of `ShortestPathFiltration` for an illustrative example.
+
+Note, if `filtration` represents the filtration $t\mapsto F^t G$ then
+`filtration.ground(G)` should return a `Filtration` representing the filtration $t\mapsto G \cup F^t G$.
+A default implementation of this method is provided.
+If $V(F^t G) \subseteq V(G)$ for all $t$ then `ProperGroundedFiltration` provides a more efficient iterator over nodes.
+
 ### Homology
 
+To specify your homology theory, implement a subclass of `grpphati.homologies.Homology`.
+The key methods to implement are the `get_<k>_cells(self, filtration)`.
+For a given $k$, the method should return an iterator of `(column, entrance_time)` tuples where `column` is a column that appears in the boundary matrix.
+For most digraph homology theories, you should only need to implement `get_two_cells`.
+
 ### Optimisations
+
+An optimisation should accept a pipeline (as constructed via `make_grounded_pipeline`) and return a new pipeline, implementing the optimisation.
+For illustrative examples, see the contents of `grpphati.optimisations`.
 
 ## TODO
 
@@ -139,7 +171,6 @@ Time elapsed = 2.702505111694336s
 - [ ] Add type hints
 - [ ] Add docstrings
 - [ ] Test `_sparsify`; is it worthwhile to split the dictionaries on dimension?
-- [ ] Write README and LICENSE
 - [ ] Figure out problem with leaked objects
 
 ## References
