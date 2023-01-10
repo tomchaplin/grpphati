@@ -11,5 +11,13 @@ def grounded_unique_rep(barcode):
     return sorted([bar[1] for bar in barcode])
 
 
-def grounded_barcodes_equal(barcode1, barcode2):
-    return grounded_unique_rep(barcode1) == grounded_unique_rep(barcode2)
+def grounded_barcodes_equal(barcode1, barcode2, tolerance=None):
+    if tolerance == None:
+        return grounded_unique_rep(barcode1) == grounded_unique_rep(barcode2)
+    else:
+        return all(
+            abs(item1 - item2) < tolerance
+            for (item1, item2) in zip(
+                grounded_unique_rep(barcode1), grounded_unique_rep(barcode2)
+            )
+        )

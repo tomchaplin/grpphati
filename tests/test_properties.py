@@ -105,6 +105,37 @@ def test_complete_graph_GrPdFlH(n):
 
 
 @settings(deadline=None)
+@given(n=st.integers(min_value=2, max_value=20), weight=valid_edge_weight)
+def test_cycle_graph_GrPPH(n, weight):
+    is_even = n % 2 == 0
+    event_msg = "Even" if is_even else "Odd"
+    event(event_msg)
+    expected_death = (n / 2) * weight if is_even else (n + 1) / 2 * weight
+    G = nx.DiGraph()
+    G.add_edges_from([(i, (i + 1) % n, {"weight": weight}) for i in range(n)])
+    barcode = GrPPH(G)
+    assert grounded_barcodes_equal(
+        barcode, [[0, expected_death]], tolerance=weight / 1e9
+    )
+
+
+# Have to exclude n=2 because double edge never dies
+@settings(deadline=None)
+@given(n=st.integers(min_value=3, max_value=20), weight=valid_edge_weight)
+def test_cycle_graph_GrPdFlH(n, weight):
+    is_even = n % 2 == 0
+    event_msg = "Even" if is_even else "Odd"
+    event(event_msg)
+    expected_death = ((n / 2) + 1) * weight if is_even else (n + 1) / 2 * weight
+    G = nx.DiGraph()
+    G.add_edges_from([(i, (i + 1) % n, {"weight": weight}) for i in range(n)])
+    barcode = GrPdFlH(G)
+    assert grounded_barcodes_equal(
+        barcode, [[0, expected_death]], tolerance=weight / 1000
+    )
+
+
+@settings(deadline=None)
 @given(
     lengths=st.lists(
         st.tuples(valid_edge_weight, valid_edge_weight), min_size=2, max_size=20

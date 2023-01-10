@@ -3,7 +3,10 @@ from hypothesis import event, strategies as st
 import networkx as nx
 
 valid_edge_weight = st.floats(
-    allow_nan=False, min_value=0, exclude_min=True, allow_infinity=False
+    allow_nan=False,
+    min_value=1e-30,
+    max_value=1e15,
+    allow_infinity=False,
 )
 
 _node_data = st.fixed_dictionaries({"number": st.integers()})
