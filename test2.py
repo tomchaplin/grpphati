@@ -6,7 +6,7 @@ from grpphati.pipelines.grounded import (
     GrPdFlH,
     make_grounded_pipeline,
 )
-from grpphati.pipelines.standard import ( PPH, PdFlH )
+from grpphati.pipelines.standard import PPH, PdFlH
 from grpphati.homologies import RegularPathHomology
 from grpphati.filtrations import ShortestPathFiltration
 

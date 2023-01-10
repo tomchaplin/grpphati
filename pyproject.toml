@@ -44,7 +44,10 @@ path = "grpphati/__about__.py"
 [tool.hatch.envs.default]
 dependencies = [
   "pytest",
+  "pytest-xdist",
   "pytest-cov",
+  "hypothesis",
+  "hypothesis-networkx"
 ]
 
 [tool.hatch.envs.default.scripts]
