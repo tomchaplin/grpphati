@@ -177,7 +177,7 @@ For illustrative examples, see the contents of `grpphati.optimisations`.
 
 - [ ] Implement non-regular path homology
 - [ ] Improve performance of sparse matrix construction?
-- [ ] Write tests
+- [ ] Write unit tests
 - [ ] Choose benchmark datasets
 - [ ] Benchmark different reductions
 - [ ] Switch to and benchmark `bit_tree_pivot_column` representation
