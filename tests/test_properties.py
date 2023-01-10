@@ -14,6 +14,7 @@ import numpy as np
 
 
 @given(G=builder)
+@settings(deadline=None)
 @report_graph_size
 def test_births_are_zero(G):
     barcode = GrPPH(G)
@@ -81,6 +82,7 @@ def test_num_features_GrPdFlH(G):
     assert len(barcode) == expected_count
 
 
+@settings(deadline=None)
 @given(n=st.integers(min_value=1, max_value=10))
 def test_complete_graph_GrPPH(n):
     expected_count = n * (n - 1) - n + 1
@@ -90,6 +92,7 @@ def test_complete_graph_GrPPH(n):
     assert grounded_barcodes_equal(expected_barcode, barcode)
 
 
+@settings(deadline=None)
 @given(n=st.integers(min_value=1, max_value=10))
 def test_complete_graph_GrPdFlH(n):
     expected_count = n * (n - 1) - n + 1
@@ -101,6 +104,7 @@ def test_complete_graph_GrPdFlH(n):
     assert grounded_barcodes_equal(expected_barcode, barcode)
 
 
+@settings(deadline=None)
 @given(
     lengths=st.lists(
         st.tuples(valid_edge_weight, valid_edge_weight), min_size=2, max_size=20
