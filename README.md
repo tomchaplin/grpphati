@@ -188,6 +188,10 @@ For illustrative examples, see the contents of `grpphati.optimisations`.
 - [ ] Figure out problem with leaked objects
 - [ ] Separate out entrance times?
 - [ ] Rephrase optimisations with decorators?
+- [ ] Add Eirene backend
+- [ ] Benchmark Eirene vs PHAT
+- [ ] Add Results class to handle backends with different return types
+- [ ] Add utilities for fetching representatives
 
 ## References
 
