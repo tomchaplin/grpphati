@@ -191,6 +191,7 @@ $ hatch run python
 4. Make your own pipelines via the `make_grounded_pipeline` interface, using the `EireneBackend`. For example:
 
 ```python
+# test3.py
 import networkx as nx
 from grpphati.pipelines.grounded import make_grounded_pipeline
 from grpphati.homologies import RegularPathHomology
@@ -215,6 +216,12 @@ G.add_edges_from(
 result = pipe(G)
 print(result.barcode)
 pprint(result.reps)
+```
+```
+$ python test3.py
+[[0.0, 1.0], [0.0, 10.0]]
+[[Edge (0, 2) :: 0, Edge (0, 1) :: 0, Edge (1, 3) :: 0, Edge (2, 3) :: 0],
+ [Edge (5, 6) :: 0, Edge (4, 5) :: 0, Edge (3, 4) :: 0, Edge (6, 3) :: 0]]
 ```
 
 > **Warning**
