@@ -9,7 +9,7 @@ from grpphati.optimisations import (
     component_appendage_empty,
     component_empty,
 )
-from grpphati.utils.ph import compute_ph_from_cols
+from grpphati.backends import Backend, PHATBackend
 from typing import Type
 import phat
 
@@ -17,12 +17,11 @@ import phat
 def make_grounded_pipeline(
     filtration_map,
     homology_cls: Type[Homology],
-    verbose: bool = False,
-    reduction: phat.reductions = phat.reductions.twist_reduction,
+    backend: Backend = PHATBackend(phat.reductions.twist_reduction),
     optimisation_strat=None,
 ):
     def pipeline(G):
-        dgm = compute_grounded_ph(G, filtration_map, homology_cls, verbose, reduction)
+        dgm = compute_grounded_ph(G, filtration_map, homology_cls, backend)
         return dgm
 
     if optimisation_strat is None:
@@ -31,24 +30,14 @@ def make_grounded_pipeline(
         return optimisation_strat(pipeline)
 
 
-def compute_grounded_ph(
-    G,
-    filtration_map,
-    homology: Type[Homology],
-    verbose: bool = False,
-    reduction: phat.reductions = phat.reductions.twist_reduction,
-):
+def compute_grounded_ph(G, filtration_map, homology: Type[Homology], backend: Backend):
     filtration = filtration_map(G)
     grounded_filtration = filtration.ground(G)
     # Build boundary matrix
-    if verbose:
-        print("Building boundary matrix")
     cols = homology.get_cells([0, 1], grounded_filtration) + homology.get_cells(
         [2], filtration
     )
-    if verbose:
-        print(f"Filtration basis has size {len(cols)}")
-    return compute_ph_from_cols(cols, verbose, reduction)
+    return backend.compute_ph(cols)
 
 
 GrPPH = make_grounded_pipeline(
