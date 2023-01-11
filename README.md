@@ -177,7 +177,7 @@ For illustrative examples, see the contents of `grpphati.optimisations`.
 
 By default, GrPPHATI used PHAT to do the core persistence computation.
 However, PHAT does not compute representatives.
-As such, an alternative backend, relying on [Eirene.jl](https://github.com/Eetion/Eirene.jl) is also provided.
+As such, an alternative backend, relying on Eirene.jl [[3]](#3) is also provided.
 Here is a rough guide to setting this up:
 
 1. Install Julia 1.6 [(needed for Eirene compatibility)](https://github.com/Eetion/Eirene.jl/issues/47). In the following assume the binary for Julia 1.6 is at `/path/to/julia` - it is important that the filename is `julia`.
@@ -262,3 +262,9 @@ arXiv preprint [arXiv:2210.11274](https://arxiv.org/abs/2210.11274).
 Bauer, U., Kerber, M., Reininghaus, J. and Wagner, H., 2017.
 Phat–persistent homology algorithms toolbox. Journal of symbolic computation, 78, pp.76-90.
 github: [xoltar/phat](https://github.com/xoltar/phat)
+
+<a id="3">[3]</a>
+Henselman, G. and Ghrist, R., 2016.
+Matroid filtrations and computational persistent homology.
+arXiv preprint [arXiv:1606.00199](https://arxiv.org/abs/1606.00199).
+github: [Eetion/Eirene.jl](https://github.com/Eetion/Eirene.jl)
