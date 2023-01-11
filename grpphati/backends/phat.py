@@ -5,7 +5,7 @@ from grpphati.results import Result
 
 
 class PHATBackend(Backend):
-    def __init__(self, reduction: phat.reductions):
+    def __init__(self, reduction: phat.reductions = phat.reductions.twist_reduction):
         self.reduction = reduction
 
     def compute_ph(self, cols) -> Result:
