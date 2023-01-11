@@ -1,17 +1,25 @@
 from .abstract import Backend
 from grpphati.utils.column import convert_to_sparse
 from grpphati.results import Result
-from julia import Julia
 from importlib import import_module
 import numpy as np
 
 
 class EireneBackend(Backend):
-    def __init__(self, runtime_path=None, check_version: bool = False):
-        self.runtime_path = runtime_path
-        self.rt = Julia(init_julia=True, runtime=self.runtime_path)
-        imported_julia = __import__("julia", fromlist=["Main"])
-        self.main = getattr(imported_julia, "Main")
+    def __init__(self, runtime_path=None, sysimage=None, check_version: bool = False):
+        try:
+            julia_pkg_1 = __import__("julia", fromlist=["Julia"])
+            Julia = getattr(julia_pkg_1, "Julia")
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError(
+                "Julia not installed - please install grpphati with the [eirene] feature enabled"
+            )
+        if not sysimage is None:
+            self.rt = Julia(init_julia=True, sysimage=sysimage, runtime=runtime_path)
+        else:
+            self.rt = Julia(init_julia=True, runtime=runtime_path)
+        julia_pkg_2 = __import__("julia", fromlist=["Main"])
+        self.main = getattr(julia_pkg_2, "Main")
         if check_version:
             self.rt.using("InteractiveUtils")
             self.rt.eval("versioninfo()")

@@ -250,6 +250,10 @@ $ python test3.py
 - [ ] Write optimisations for Eirene backend to replace parallel ones
 - [ ] Setup Eirene notebook?
 - [ ] Write some example scripts
+- [x] Allow Eirene backend to accept system image
+- [x] Write script for building `eirene_sys.so`
+- [x] Precompile necessary functions when building `eirene_sys.so`
+- [ ] Write explainer Markdown file for Eirene backend and system images
 
 ## References
 
