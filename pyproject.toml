@@ -33,6 +33,11 @@ dependencies = [
 ]
 dynamic = ["version"]
 
+[project.optional-dependencies]
+eirene = [
+    "julia~=0.6.0"
+]
+
 [project.urls]
 Documentation = "https://github.com/tomchaplin/grpphati#readme"
 Issues = "https://github.com/tomchaplin/grpphati/issues"
@@ -53,6 +58,9 @@ dependencies = [
 [tool.hatch.envs.default.scripts]
 cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=grpphati --cov=tests {args}"
 no-cov = "cov --no-cov {args}"
+
+[tool.hatch.envs.eirene]
+features = ["eirene"]
 
 [[tool.hatch.envs.test.matrix]]
 python = ["37", "38", "39", "310", "311"]

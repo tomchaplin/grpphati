@@ -173,6 +173,54 @@ This allows `convert_to_sparse` to lookup the index of each column when sparsify
 An optimisation should accept a pipeline (as constructed via `make_grounded_pipeline`) and return a new pipeline, implementing the optimisation.
 For illustrative examples, see the contents of `grpphati.optimisations`.
 
+### Backends
+
+By default, GrPPHATI used PHAT to do the core persistence computation.
+However, PHAT does not compute representatives.
+As such, an alternative backend, relying on [Eirene.jl](https://github.com/Eetion/Eirene.jl) is also provided.
+Here is a rough guide to setting this up:
+
+1. Install Julia 1.6 [(needed for Eirene compatibility)](https://github.com/Eetion/Eirene.jl/issues/47). In the following assume the binary for Julia 1.6 is at `/path/to/julia` - it is important that the filename is `julia`.
+2. Install `grpphati` with the optional `[eirene]` feature flag, ideally in a virtual environment.
+3. Install PyCall for Julia from within your virtual environment, e.g. if using `hatch`
+```
+$ hatch run python
+>>> import julia
+>>> julia.install(julia="/path/to/julia")
+```
+4. Make your own pipelines via the `make_grounded_pipeline` interface, using the `EireneBackend`. For example:
+
+```python
+import networkx as nx
+from grpphati.pipelines.grounded import make_grounded_pipeline
+from grpphati.homologies import RegularPathHomology
+from grpphati.filtrations import ShortestPathFiltration
+from grpphati.backends import EireneBackend
+from grpphati.optimisations import all_optimisations_serial
+from pprint import pprint
+
+pipe = make_grounded_pipeline(
+    ShortestPathFiltration,
+    RegularPathHomology,
+    backend=EireneBackend(
+        runtime_path="/home/tom/Downloads/julia/julia-1.6.6/bin/julia"
+    ),
+    optimisation_strat=all_optimisations_serial,
+)
+
+G = nx.DiGraph()
+G.add_edges_from(
+    [(0, 1), (0, 2), (1, 3), (2, 3), (3, 4), (4, 5), (5, 6), (6, 3, {"weight": 10})]
+)
+result = pipe(G)
+print(result.barcode)
+pprint(result.reps)
+```
+
+> **Warning**
+> Julia code [cannot be called in parallel](https://pyjulia.readthedocs.io/en/latest/limitations.html) via PyJulia.
+> As such, the parallel optimisations should not be used without setting `n_jobs=1`.
+
 ## TODO
 
 - [ ] Implement non-regular path homology
@@ -188,10 +236,13 @@ For illustrative examples, see the contents of `grpphati.optimisations`.
 - [ ] Figure out problem with leaked objects
 - [ ] Separate out entrance times?
 - [ ] Rephrase optimisations with decorators?
-- [ ] Add Eirene backend
+- [x] Add Eirene backend
 - [ ] Benchmark Eirene vs PHAT
-- [ ] Add Results class to handle backends with different return types
-- [ ] Add utilities for fetching representatives
+- [x] Add Results class to handle backends with different return types
+- [ ] Test Eirene
+- [ ] Write optimisations for Eirene backend to replace parallel ones
+- [ ] Setup Eirene notebook?
+- [ ] Write some example scripts
 
 ## References
 
