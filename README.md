@@ -203,7 +203,7 @@ pipe = make_grounded_pipeline(
     ShortestPathFiltration,
     RegularPathHomology,
     backend=EireneBackend(
-        runtime_path="/home/tom/Downloads/julia/julia-1.6.6/bin/julia"
+        runtime_path="/path/to/julia"
     ),
     optimisation_strat=all_optimisations_serial,
 )
