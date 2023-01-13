@@ -26,5 +26,5 @@ def component_empty(pipeline):
     return parallel_over_components(check_empty(pipeline))
 
 
-def component_empty_serail(pipeline):
+def component_empty_serial(pipeline):
     return parallel_over_components(check_empty(pipeline), n_jobs=1)
