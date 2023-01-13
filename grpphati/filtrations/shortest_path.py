@@ -40,7 +40,7 @@ def _non_trivial_dict(sp_iter):
         source: {
             target: distance
             for target, distance in distances.items()
-            if target != source
+            if target != source and np.isfinite(distance)
         }
         for source, distances in sp_iter
     }
