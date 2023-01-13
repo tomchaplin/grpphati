@@ -24,7 +24,11 @@ def wedge_components(G, starting=None):
         return []
     for node in subgraph.nodes:
         without_node = nx.restricted_view(subgraph, [node], [])
-        is_wedge = not nx.is_weakly_connected(without_node)
+        # Have to check without_node is note a null graph
+        # For example without_node might be a double edge graph
+        is_wedge = (without_node.number_of_edges() != 0) and not nx.is_weakly_connected(
+            without_node
+        )
         if is_wedge:
             wedge_comps = [
                 comp | {node} for comp in nx.weakly_connected_components(without_node)
