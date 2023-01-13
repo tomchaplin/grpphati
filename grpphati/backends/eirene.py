@@ -28,11 +28,18 @@ class EireneBackend(Backend):
     def compute_ph(self, cols) -> Result:
         cols.sort(key=lambda col: col.dimension())
         # Dimension vector
-        self.main.dv = [col.dimension() for col in cols]
+        dv = [col.dimension() for col in cols]
         # Filtration vector (entrance times)
-        self.main.fv = [col.entrance_time for col in cols]
+        fv = [col.entrance_time for col in cols]
         # Compute sparse representation
         sparse_cols = convert_to_sparse(cols)
+        if _no_two_cells(dv):
+            # We need to add a dummy 2 cell to force Eirene to compute barcode in degree 1
+            sparse_cols.append((2, []))
+            fv.append(0)
+            dv.append(2)
+        self.main.dv = dv
+        self.main.fv = fv
         # Row vector - concatenation of sparse columns (indexed from 1)
         self.main.rv = [
             nonzero_row + 1
@@ -54,6 +61,10 @@ class EireneBackend(Backend):
         dim1_cols = [col for col in cols if col.dimension() == 1]
         python_reps = [_julia_to_python_rep(rep, dim1_cols) for rep in julia_reps]
         return Result(barcode=barcode, reps=python_reps)
+
+
+def _no_two_cells(dv):
+    return not any(dimension == 2 for dimension in dv)
 
 
 def _julia_to_python_rep(julia_rep, dim1_cols):
