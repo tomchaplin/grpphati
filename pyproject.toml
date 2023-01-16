@@ -64,6 +64,7 @@ features = ["eirene"]
 
 [[tool.hatch.envs.test.matrix]]
 python = ["37", "38", "39", "310", "311"]
+features = ["eirene"]
 
 [tool.hatch.metadata]
 allow-direct-references = true
