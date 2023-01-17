@@ -4,3 +4,4 @@ test2.py
 dist
 .hypothesis
 *.so
+*_stats
