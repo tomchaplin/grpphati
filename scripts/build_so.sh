@@ -10,6 +10,7 @@
 # You may want to change this by removing the eirene:
 # You could also just run each of these commands by hand
 
-JULIA_PATH="/home/tom/Downloads/julia/julia-1.6.6/bin/julia"
+JULIA_PATH="/home/tom/Downloads/julia/julia-1.6.7/bin/julia"
 $JULIA_PATH build_eirene_sys.jl
-hatch run eirene:python -m julia.sysimage --julia $JULIA_PATH --base-sysimage "$PWD/eirene_sys.so" patched_sys.so
+hatch run eirene:python -m julia.sysimage \
+  --julia $JULIA_PATH --base-sysimage "scripts/eirene_sys.so" patched_sys.so
