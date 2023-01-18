@@ -1,3 +1,8 @@
+import sys
+import os
+
+sys.path.append(os.getcwd())
+
 import networkx as nx
 import time
 from grpphati.pipelines.grounded import (
@@ -9,6 +14,7 @@ from grpphati.pipelines.grounded import (
 from grpphati.pipelines.standard import PPH, PdFlH
 from grpphati.homologies import RegularPathHomology
 from grpphati.filtrations import ShortestPathFiltration
+
 
 GrPPH_slow = make_grounded_pipeline(ShortestPathFiltration, RegularPathHomology)
 

@@ -46,20 +46,20 @@ The quickest way to get started is to use the default implementation of GrPPH or
 All descriptors implemented in `grpphati` expect a `networkx.DiGraph` as input with the edge-weights stored in the `weight` attribute.
 
 ```python
-# test.py
+# examples/readme_1.py
 from grpphati.pipelines.grounded import GrPPH, GrPdFlH
 import networkx as nx
 
 G = nx.DiGraph()
-G.add_edges_from([(0, 1), (0, 2), (1, 3), (2, 3)], weight = 3)
-grpph_bar = GrPPH(G)
-grpdflh_bar = GrPdFlH(G)
+G.add_edges_from([(0, 1), (0, 2), (1, 3), (2, 3)], weight=3)
+grpph_bar = GrPPH(G).barcode
+grpdflh_bar = GrPdFlH(G).barcode
 
 print(grpph_bar)
 print(grpdflh_bar)
 ```
 ```
-$ python test.py
+$ python example/readme_1.py
 [[0, 3]]
 [[0, 6]]
 ```
@@ -78,7 +78,7 @@ For example, the following script computes the GrPPH of the wedge of two complet
 The output is from a laptop with a Ryzen 5 3500U @2.1GHz.
 
 ```python
-# test2.py
+# examples/readme_2.py
 import networkx as nx
 import time
 from grpphati.pipelines.grounded import (
@@ -107,17 +107,17 @@ print(f"{G_wedge.number_of_nodes()} nodes in wedge graph")
 
 (out, elap) = timed(lambda: GrPPH(G_wedge))
 print("Serial:")
-print(f"Size of barcode = {len(out)}")
+print(f"Size of barcode = {len(out.barcode)}")
 print(f"Time elapsed = {elap}s")
 
 print("Parallel over wedges:")
 (out, elap) = timed(lambda: GrPPH_par_wedge(G_wedge))
-print(f"Size of barcode = {len(out)}")
+print(f"Size of barcode = {len(out.barcode)}")
 print(f"Time elapsed = {elap}s")
 ```
 
 ```
-$ python test2.py
+$ python examples/readme_2.py
 99 nodes in wedge graph
 Serial:
 Size of barcode = 4802
@@ -138,7 +138,7 @@ The pipeline `PdFlH` combines directed flag complex homology with the shortest-p
 GrPPHATI is in fact a library for implementing instances of the grounded pipeline.
 The main interface for is the function `make_grounded_pipeline` in the `grpphati.pipelines.grounded` module.
 The required arguments a filtration map and a homology class, which are explained further in the following sections.
-Additionally, you can specify the persistence algorithm via a `phat.reductions` and provide an optimisation strategy.
+Additionally, you can specify the PH backend and provide an optimisation strategy.
 The function returns a 'pipeline' which accepts a `nx.DiGraph` and returns the barcode.
 
 The function `make_standard_pipeline` in `grpphati.pipelines.standard` has the same interface and returns the standard pipeline.
@@ -175,7 +175,7 @@ For illustrative examples, see the contents of `grpphati.optimisations`.
 
 ### Backends
 
-By default, GrPPHATI used PHAT to do the core persistence computation.
+By default, GrPPHATI uses PHAT to do the core persistence computation.
 However, PHAT does not compute representatives.
 As such, an alternative backend, relying on Eirene.jl [[3]](#3) is also provided.
 Here is a rough guide to setting this up:
@@ -191,7 +191,7 @@ $ hatch run python
 4. Make your own pipelines via the `make_grounded_pipeline` interface, using the `EireneBackend`. For example:
 
 ```python
-# test3.py
+# examples/eirene_simple_ex.py
 import networkx as nx
 from grpphati.pipelines.grounded import make_grounded_pipeline
 from grpphati.homologies import RegularPathHomology
@@ -218,7 +218,7 @@ print(result.barcode)
 pprint(result.reps)
 ```
 ```
-$ python test3.py
+$ python examples/eirene_simple_ex.py
 [[0.0, 1.0], [0.0, 10.0]]
 [[Edge (0, 2) :: 0, Edge (0, 1) :: 0, Edge (1, 3) :: 0, Edge (2, 3) :: 0],
  [Edge (5, 6) :: 0, Edge (4, 5) :: 0, Edge (3, 4) :: 0, Edge (6, 3) :: 0]]
@@ -227,6 +227,18 @@ $ python test3.py
 > **Warning**
 > Julia code [cannot be called in parallel](https://pyjulia.readthedocs.io/en/latest/limitations.html) via PyJulia.
 > As such, the parallel optimisations should not be used without setting `n_jobs=1`.
+
+When using `EireneBackend` you may notice it takes a while for the backend to initialise.
+This is because `Julia` has to boot up and compile Eirene.
+To speed this up, you can additionally provide `EireneBackend` with a `sysimage`.
+This image should have Eirene pre-compiled and the necessary bootstrapping for compatibility with PyJulia.
+To build such a system image:
+
+1. Clone this repository and install `hatch`.
+2. Change `JULIA_PATH` in `scripts/build_so.sh` to point to your Julia install.
+3. From the `scripts` directory, run `./build_so.sh`.
+
+See `examples/eirene_ex.py` for example usage
 
 ## TODO
 

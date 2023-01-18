@@ -1,3 +1,8 @@
+import sys
+import os
+
+sys.path.append(os.getcwd())
+
 import networkx as nx
 import time
 from grpphati.pipelines.grounded import make_grounded_pipeline
@@ -48,12 +53,11 @@ N = 100
 G3_1 = nx.complete_graph(N, create_using=nx.DiGraph)
 G3_2 = nx.complete_graph(N, create_using=nx.DiGraph)
 G3 = nx.disjoint_union(G3_1, G3_2)
-# (out, elap) = timed(lambda: pipe(G3))
-out = pipe(G3)
+(out, elap) = timed(lambda: pipe(G3))
 print(len(out.barcode))
 print(out.reps[0])
-# print(elap)
-# (out, elap) = timed(lambda: phat_pipe(G3))
+print(elap)
+(out, elap) = timed(lambda: phat_pipe(G3))
 out = phat_pipe(G3)
 print(len(out.barcode))
-# print(elap)
+print(elap)
