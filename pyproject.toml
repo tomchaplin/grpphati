@@ -37,6 +37,9 @@ dynamic = ["version"]
 eirene = [
     "julia~=0.6.0"
 ]
+persuit = [
+  "persuit @ git+https://github.com/tomchaplin/persuit.git",
+]
 
 [project.urls]
 Documentation = "https://github.com/tomchaplin/grpphati#readme"
