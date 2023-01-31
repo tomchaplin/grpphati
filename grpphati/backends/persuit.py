@@ -3,7 +3,7 @@ from grpphati.utils.column import SparseConstructor
 from grpphati.results import Result
 try:
     from persuit import std_persuit, std_persuit_serial, std_persuit_serial_bs
-except ImporError:
+except ImportError:
     _has_persuit = False
 else:
     _has_persuit = True
