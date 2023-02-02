@@ -11,10 +11,10 @@ class EdgeCol(Column):
         return f"Edge {self.edge} :: {self.entrance_time}"
 
     def __eq__(self, other):
-        return self.edge == other.edge
+        return isinstance(other, EdgeCol) and self.edge == other.edge
 
     def __hash__(self):
-        return hash(self.edge)
+        return hash((EdgeCol, self.edge))
 
     def dimension(self):
         return 1

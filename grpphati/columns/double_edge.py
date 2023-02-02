@@ -11,13 +11,13 @@ class DoubleEdgeCol(Column):
         return f"Double Edge {(self.forward_edge[0], self.forward_edge[1], self.forward_edge[0])} :: {self.entrance_time}"
 
     def __eq__(self, other):
-        return (self.forward_edge[0], self.forward_edge[1]) == (
+        return isistance(other, DoubleEdgeCol) and (self.forward_edge[0], self.forward_edge[1]) == (
             other.forward_edge[0],
             other.forward_edge[1],
         )
 
     def __hash__(self):
-        return hash(self.forward_edge)
+        return hash((DoubleEdgeCol, self.forward_edge))
 
     def dimension(self):
         return 2

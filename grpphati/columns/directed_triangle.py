@@ -11,10 +11,10 @@ class DirectedTriangleCol(Column):
         return f"Directed Triangle {self.two_path} :: {self.entrance_time}"
 
     def __eq__(self, other):
-        return self.two_path == other.two_path
+        return isinstance(other, DirectedTriangleCol) and self.two_path == other.two_path
 
     def __hash__(self):
-        return hash(self.two_path)
+        return hash((DirectedTriangleCol, self.two_path))
 
     def dimension(self):
         return 2

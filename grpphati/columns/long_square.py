@@ -13,14 +13,14 @@ class LongSquareCol(Column):
         return f"Long Square ({self.start},{self.midpoints},{self.end}) :: {self.entrance_time}"
 
     def __eq__(self, other):
-        return (
+        return isinstance(other, LongSquareCol) and (
             self.start == other.start
             and self.midpoints == other.midpoints
             and self.end == other.end
         )
 
     def __hash__(self):
-        return hash((self.start, self.midpoints, self.start))
+        return hash((LongSquareCol,(self.start, self.midpoints, self.start)))
 
     def dimension(self):
         return 2

@@ -15,7 +15,7 @@ GrPPH = make_grounded_pipeline(
     ShortestPathFiltration,
     RegularPathHomology,
     backend=EireneBackend(
-        runtime_path="/home/tom/Downloads/julia/julia-1.6.6/bin/julia",
+        runtime_path="/home/tom/Downloads/julia/julia-1.6.7/bin/julia",
         sysimage="patched_sys.so",
     ),
     optimisation_strat=all_optimisations_serial,
@@ -25,7 +25,7 @@ GrPdFlH = make_grounded_pipeline(
     ShortestPathFiltration,
     DirectedFlagComplexHomology,
     backend=EireneBackend(
-        runtime_path="/home/tom/Downloads/julia/julia-1.6.6/bin/julia",
+        runtime_path="/home/tom/Downloads/julia/julia-1.6.7/bin/julia",
         sysimage="patched_sys.so",
     ),
     optimisation_strat=component_empty_serial,

@@ -1,12 +1,12 @@
 from .abstract import Backend
-from grpphati.utils.column import convert_to_sparse
+from grpphati.sparsifiers import ListSparsifier
 from grpphati.results import Result
 from importlib import import_module
 import numpy as np
 
 
 class EireneBackend(Backend):
-    def __init__(self, runtime_path=None, sysimage=None, check_version: bool = False):
+    def __init__(self, runtime_path=None, sysimage=None, check_version: bool = False, sparsifier=ListSparsifier(return_dimension=False)):
         try:
             julia_pkg_1 = __import__("julia", fromlist=["Julia"])
             Julia = getattr(julia_pkg_1, "Julia")
@@ -24,18 +24,19 @@ class EireneBackend(Backend):
             self.rt.using("InteractiveUtils")
             self.rt.eval("versioninfo()")
         self.rt.eval("using Eirene")
+        self.sparsifier = sparsifier
 
     def compute_ph(self, cols) -> Result:
         cols.sort(key=lambda col: col.dimension())
         # Dimension vector
         dv = [col.dimension() for col in cols]
         # Filtration vector (entrance times)
-        fv = [col.entrance_time for col in cols]
+        fv = [col.get_entrance_time() for col in cols]
         # Compute sparse representation
-        sparse_cols = convert_to_sparse(cols)
+        sparse_cols = self.sparsifier(cols)
         if _no_two_cells(dv):
             # We need to add a dummy 2 cell to force Eirene to compute barcode in degree 1
-            sparse_cols.append((2, []))
+            sparse_cols.append([])
             fv.append(0)
             dv.append(2)
         self.main.dv = dv
@@ -43,11 +44,11 @@ class EireneBackend(Backend):
         # Row vector - concatenation of sparse columns (indexed from 1)
         self.main.rv = [
             nonzero_row + 1
-            for (_, sparse_col) in sparse_cols
+            for sparse_col in sparse_cols
             for nonzero_row in sparse_col
         ]
         # Column pointers - tells us indices at which each col starts (indexed from 1)
-        col_sizes = [len(sparse_col) for (_, sparse_col) in sparse_cols]
+        col_sizes = [len(sparse_col) for sparse_col in sparse_cols]
         col_starts = [1] + [int(s + 1) for s in np.cumsum(col_sizes)]
         self.main.cp = list(col_starts)
         # Eirene computation

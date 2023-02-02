@@ -1,16 +1,17 @@
 from .abstract import Backend
 import phat
-from grpphati.utils.column import convert_to_sparse
+from grpphati.sparsifiers import ListSparsifier
 from grpphati.results import Result
 
 
 class PHATBackend(Backend):
-    def __init__(self, reduction: phat.reductions = phat.reductions.twist_reduction):
+    def __init__(self, reduction: phat.reductions = phat.reductions.twist_reduction, sparsifier=ListSparsifier(return_dimension=True)):
         self.reduction = reduction
+        self.sparsifier = sparsifier
 
     def compute_ph(self, cols) -> Result:
-        cols.sort(key=lambda col: (col.entrance_time, col.dimension()))
-        sparse_cols = convert_to_sparse(cols)
+        cols.sort(key=lambda col: (col.get_entrance_time(), col.dimension()))
+        sparse_cols = self.sparsifier(cols)
         boundary_matrix = phat.boundary_matrix(
             columns=sparse_cols, representation=phat.representations.sparse_pivot_column
         )

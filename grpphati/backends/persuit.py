@@ -1,5 +1,5 @@
 from grpphati.backends.abstract import Backend
-from grpphati.utils.column import SparseConstructor
+from grpphati.sparsifiers import GeneratorSparsifier
 from grpphati.results import Result
 try:
     from persuit import std_persuit, std_persuit_serial, std_persuit_serial_bs
@@ -10,16 +10,17 @@ else:
 
 
 class PersuitBackend(Backend):
-    def __init__(self, in_parallel=True, internal='vec'):
+    def __init__(self, in_parallel=True, internal='vec', sparsifier=GeneratorSparsifier(return_dimension=False)):
         if not _has_persuit:
             raise ImportError("Optional dependency persuit required")
         self.in_parallel = in_parallel
         self.internal = internal
+        self.sparsifier = sparsifier
 
     def compute_ph(self, cols) -> Result:
-        cols.sort(key=lambda col: (col.entrance_time, col.dimension()))
+        cols.sort(key=lambda col: (col.get_entrance_time(), col.dimension()))
         # Extract rows, ignore dimension
-        sparse_cols = map(lambda x: x[1], SparseConstructor(iter(cols)))
+        sparse_cols = self.sparsifier(iter(cols))
         if self.in_parallel:
             pairs = std_persuit(sparse_cols)
         else:

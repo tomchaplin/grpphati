@@ -10,10 +10,10 @@ class NodeCol(Column):
         return f"Node {self.node} :: {self.entrance_time}"
 
     def __eq__(self, other):
-        return self.node == other.node
+        return isinstance(other, NodeCol) and self.node == other.node
 
     def __hash__(self):
-        return hash(self.node)
+        return hash((NodeCol, self.node))
 
     def dimension(self):
         return 0
