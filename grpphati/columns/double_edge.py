@@ -11,7 +11,10 @@ class DoubleEdgeCol(Column):
         return f"Double Edge {(self.forward_edge[0], self.forward_edge[1], self.forward_edge[0])} :: {self.entrance_time}"
 
     def __eq__(self, other):
-        return isistance(other, DoubleEdgeCol) and (self.forward_edge[0], self.forward_edge[1]) == (
+        return isinstance(other, DoubleEdgeCol) and (
+            self.forward_edge[0],
+            self.forward_edge[1],
+        ) == (
             other.forward_edge[0],
             other.forward_edge[1],
         )
