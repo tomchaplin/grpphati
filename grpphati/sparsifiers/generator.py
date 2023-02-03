@@ -1,5 +1,6 @@
 from .abstract import Sparsifier
 
+
 class GeneratorSparsifier(Sparsifier):
     def __init__(self, return_dimension=True):
         self.return_dimension = return_dimension

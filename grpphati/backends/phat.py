@@ -5,7 +5,11 @@ from grpphati.results import Result
 
 
 class PHATBackend(Backend):
-    def __init__(self, reduction: phat.reductions = phat.reductions.twist_reduction, sparsifier=ListSparsifier(return_dimension=True)):
+    def __init__(
+        self,
+        reduction: phat.reductions = phat.reductions.twist_reduction,
+        sparsifier=ListSparsifier(return_dimension=True),
+    ):
         self.reduction = reduction
         self.sparsifier = sparsifier
 

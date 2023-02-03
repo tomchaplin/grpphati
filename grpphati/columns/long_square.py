@@ -20,7 +20,7 @@ class LongSquareCol(Column):
         )
 
     def __hash__(self):
-        return hash((LongSquareCol,(self.start, self.midpoints, self.start)))
+        return hash((LongSquareCol, (self.start, self.midpoints, self.start)))
 
     def dimension(self):
         return 2

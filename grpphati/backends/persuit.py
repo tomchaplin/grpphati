@@ -1,6 +1,7 @@
 from grpphati.backends.abstract import Backend
 from grpphati.sparsifiers import GeneratorSparsifier
 from grpphati.results import Result
+
 try:
     from persuit import std_persuit, std_persuit_serial, std_persuit_serial_bs
 except ImportError:
@@ -10,7 +11,12 @@ else:
 
 
 class PersuitBackend(Backend):
-    def __init__(self, in_parallel=True, internal='vec', sparsifier=GeneratorSparsifier(return_dimension=False)):
+    def __init__(
+        self,
+        in_parallel=True,
+        internal="vec",
+        sparsifier=GeneratorSparsifier(return_dimension=False),
+    ):
         if not _has_persuit:
             raise ImportError("Optional dependency persuit required")
         self.in_parallel = in_parallel
@@ -24,7 +30,7 @@ class PersuitBackend(Backend):
         if self.in_parallel:
             pairs = std_persuit(sparse_cols)
         else:
-            if self.internal == 'bitset':
+            if self.internal == "bitset":
                 pairs = std_persuit_serial_bs(sparse_cols)
             else:
                 pairs = std_persuit_serial(sparse_cols)

@@ -6,7 +6,13 @@ import numpy as np
 
 
 class EireneBackend(Backend):
-    def __init__(self, runtime_path=None, sysimage=None, check_version: bool = False, sparsifier=ListSparsifier(return_dimension=False)):
+    def __init__(
+        self,
+        runtime_path=None,
+        sysimage=None,
+        check_version: bool = False,
+        sparsifier=ListSparsifier(return_dimension=False),
+    ):
         try:
             julia_pkg_1 = __import__("julia", fromlist=["Julia"])
             Julia = getattr(julia_pkg_1, "Julia")
@@ -43,9 +49,7 @@ class EireneBackend(Backend):
         self.main.fv = fv
         # Row vector - concatenation of sparse columns (indexed from 1)
         self.main.rv = [
-            nonzero_row + 1
-            for sparse_col in sparse_cols
-            for nonzero_row in sparse_col
+            nonzero_row + 1 for sparse_col in sparse_cols for nonzero_row in sparse_col
         ]
         # Column pointers - tells us indices at which each col starts (indexed from 1)
         col_sizes = [len(sparse_col) for sparse_col in sparse_cols]

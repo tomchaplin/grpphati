@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
-class Sparsifier(ABC):
 
+class Sparsifier(ABC):
     @abstractmethod
     def __call__(self):
         pass

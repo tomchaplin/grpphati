@@ -1,5 +1,6 @@
 from .abstract import Sparsifier
 
+
 class ListSparsifier(Sparsifier):
     def __init__(self, return_dimension=True):
         self.return_dimension = return_dimension
@@ -14,5 +15,5 @@ class ListSparsifier(Sparsifier):
                 sparse_bdry = (col.dimension(), sparse_bdry)
             insertion_idx = len(sparse_cols)
             sparse_cols.append(sparse_bdry)
-            col2idx_map[col]=insertion_idx
+            col2idx_map[col] = insertion_idx
         return sparse_cols
