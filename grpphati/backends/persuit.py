@@ -1,5 +1,5 @@
 from grpphati.backends.abstract import Backend
-from grpphati.sparsifiers import GeneratorSparsifier
+from grpphati.sparsifiers import Sparsifier, GeneratorSparsifier
 from grpphati.results import Result
 
 try:
@@ -15,7 +15,7 @@ class PersuitBackend(Backend):
         self,
         in_parallel=True,
         internal="vec",
-        sparsifier=GeneratorSparsifier(return_dimension=False),
+        sparsifier: Sparsifier = GeneratorSparsifier(return_dimension=False),
     ):
         if not _has_persuit:
             raise ImportError("Optional dependency persuit required")

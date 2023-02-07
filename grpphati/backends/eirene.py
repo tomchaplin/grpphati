@@ -1,5 +1,5 @@
 from .abstract import Backend
-from grpphati.sparsifiers import ListSparsifier
+from grpphati.sparsifiers import Sparsifier, ListSparsifier
 from grpphati.results import Result
 from importlib import import_module
 import numpy as np
@@ -11,7 +11,7 @@ class EireneBackend(Backend):
         runtime_path=None,
         sysimage=None,
         check_version: bool = False,
-        sparsifier=ListSparsifier(return_dimension=False),
+        sparsifier: Sparsifier = ListSparsifier(return_dimension=False),
     ):
         try:
             julia_pkg_1 = __import__("julia", fromlist=["Julia"])

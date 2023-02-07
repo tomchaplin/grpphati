@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 class Sparsifier(ABC):
     @abstractmethod
-    def __call__(self):
+    def __call__(self, cols):
         pass
 
     @staticmethod
