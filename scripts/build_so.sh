@@ -10,7 +10,12 @@
 # You may want to change this by removing the eirene:
 # You could also just run each of these commands by hand
 
-JULIA_PATH="/home/tom/Downloads/julia/julia-1.6.7/bin/julia"
+juliaup add 1.6.7
+juliaup default 1.6.7
+JULIA_PATH=$(which julia)
 $JULIA_PATH build_eirene_sys.jl
 hatch run eirene:python -m julia.sysimage \
   --julia $JULIA_PATH --base-sysimage "scripts/eirene_sys.so" patched_sys.so
+echo "Julia has been changed to 1.6.7, you may want to run the following command"
+echo ""
+echo "juliaup default release"

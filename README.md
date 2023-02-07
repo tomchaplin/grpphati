@@ -235,8 +235,9 @@ This image should have Eirene pre-compiled and the necessary bootstrapping for c
 To build such a system image:
 
 1. Clone this repository and install `hatch`.
-2. Change `JULIA_PATH` in `scripts/build_so.sh` to point to your Julia install.
-3. From the `scripts` directory, run `./build_so.sh`.
+2. Install [juliaup](https://github.com/JuliaLang/juliaup).
+3. Move into the `scripts` directory and run `./build_so.sh`.
+4. The system image is now in the root of the project, named `patched_sys.so`.
 
 See `examples/eirene_ex.py` for example usage
 
