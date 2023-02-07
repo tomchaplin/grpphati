@@ -133,6 +133,10 @@ For ease of comparison, we also provide implementations of the standard pipeline
 The pipeline `PPH` combines path homology with the shortest-path filtration (`PPH_par_wedge` parallelises over wedges).
 The pipeline `PdFlH` combines directed flag complex homology with the shortest-path filtration.
 
+### grpphati_rs
+
+If you are computing GrPPH on large networks, consider using [`grpphati_rs`](https://github.com/tomchaplin/grpphati_rs), which computes the basis of the boundary matrix in parallel, in Rust.
+
 ## Advanced Usage
 
 GrPPHATI is in fact a library for implementing instances of the grounded pipeline.
