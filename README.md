@@ -254,23 +254,18 @@ See `examples/eirene_ex.py` for example usage
 - [ ] Benchmark different reductions
 - [ ] Switch to and benchmark `bit_tree_pivot_column` representation
 - [ ] Benchmark optimisations
+- [ ] Expand hypothesis test coverage - test combinations of backends + optimisations
 - [ ] Add type hints
 - [ ] Add docstrings
-- [ ] Test `_sparsify`; is it worthwhile to split the dictionaries on dimension?
-- [ ] Figure out problem with leaked objects
 - [ ] Separate out entrance times?
 - [ ] Rephrase optimisations with decorators?
 - [x] Add Eirene backend
 - [ ] Benchmark Eirene vs PHAT
 - [x] Add Results class to handle backends with different return types
-- [ ] Test Eirene
-- [ ] Write optimisations for Eirene backend to replace parallel ones
-- [ ] Setup Eirene notebook?
-- [ ] Write some example scripts
+- [ ] Setup Eirene notebook
 - [x] Allow Eirene backend to accept system image
 - [x] Write script for building `eirene_sys.so`
-- [x] Precompile necessary functions when building `eirene_sys.so`
-- [ ] Write explainer Markdown file for Eirene backend and system images
+- [x] Precompile necessary functions when building `eirene_sys.so
 
 ## References
 
