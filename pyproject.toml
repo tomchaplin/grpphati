@@ -38,7 +38,7 @@ eirene = [
     "julia~=0.6.0"
 ]
 persuit = [
-  "persuit @ git+https://github.com/tomchaplin/persuit.git",
+  "persuit==0.1.0",
 ]
 
 [project.urls]
@@ -64,6 +64,9 @@ no-cov = "cov --no-cov {args}"
 
 [tool.hatch.envs.eirene]
 features = ["eirene"]
+
+[tool.hatch.envs.persuit]
+features = ["persuit"]
 
 [[tool.hatch.envs.test.matrix]]
 python = ["37", "38", "39", "310", "311"]
