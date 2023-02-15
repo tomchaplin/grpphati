@@ -35,6 +35,34 @@ class Result:
         self.barcode.extend(other_result.barcode)
         self.reps.extend(other_result.reps)
 
+    def num_features(self):
+        return len(self.barcode)
+
+    def num_infinite_features(self):
+        return len([True for bar in self.barcode if bar[1] == np.inf])
+
+    def num_finite_features(self):
+        return len([True for bar in self.barcode if np.isfinite(bar[1])])
+
+    def max_finite_feature(self):
+        try:
+            return max(bar[1] for bar in self.barcode if np.isfinite(bar[1]))
+        except ValueError:
+            return None
+
+    def min_finite_feature(self):
+        try:
+            return min(bar[1] for bar in self.barcode if np.isfinite(bar[1]))
+        except ValueError:
+            return None
+
+    def compute_betti_curve(self, x_range):
+        n_features = self.num_features()
+        return [
+            n_features - len([True for bar in self.barcode if bar[1] <= x])
+            for x in x_range
+        ]
+
     @staticmethod
     def merge(*results):
         ret_val = results[0]
