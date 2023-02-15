@@ -16,7 +16,6 @@ class PHATBackend(Backend):
     def compute_ph(self, cols) -> Result:
         cols.sort(key=lambda col: (col.get_entrance_time(), col.dimension()))
         sparse_cols = self.sparsifier(cols)
-        print("Sparsified")
         boundary_matrix = phat.boundary_matrix(
             columns=sparse_cols, representation=phat.representations.sparse_pivot_column
         )
