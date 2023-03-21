@@ -21,7 +21,7 @@ class LoPHATBackend(Backend):
         opts = LoPhatOptions(
             num_threads=self.num_threads, min_chunk_len=self.min_chunk_len
         )
-        diagram = compute_pairings(sparse_cols)
+        diagram = compute_pairings(sparse_cols, opts)
         pairs = list(diagram.paired)
         pairs.sort()
         result = Result.empty()
