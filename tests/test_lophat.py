@@ -4,29 +4,25 @@ from grpphati.filtrations.shortest_path import ShortestPathFiltration
 from grpphati.homologies.directed_flag import DirectedFlagComplexHomology
 from grpphati.homologies.path_homology import RegularPathHomology
 from grpphati.optimisations.composite import (
-    all_optimisations_serial,
-    component_empty_serial,
+    all_optimisations,
+    component_empty,
 )
 from grpphati.pipelines.grounded import make_grounded_pipeline
-from grpphati.backends import EireneBackend
+from grpphati.backends import LoPHATBackend
 from .utils import grounded_barcodes_equal
 
 GrPPH = make_grounded_pipeline(
     ShortestPathFiltration,
     RegularPathHomology,
-    backend=EireneBackend(
-        sysimage="patched_sys.so",
-    ),
-    optimisation_strat=all_optimisations_serial,
+    backend=LoPHATBackend(),
+    optimisation_strat=all_optimisations,
 )
 
 GrPdFlH = make_grounded_pipeline(
     ShortestPathFiltration,
     DirectedFlagComplexHomology,
-    backend=EireneBackend(
-        sysimage="patched_sys.so",
-    ),
-    optimisation_strat=component_empty_serial,
+    backend=LoPHATBackend(),
+    optimisation_strat=component_empty,
 )
 
 

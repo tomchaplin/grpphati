@@ -3,20 +3,20 @@ import os
 
 sys.path.append(os.getcwd())
 
-
 import networkx as nx
 from grpphati.pipelines.grounded import make_grounded_pipeline
 from grpphati.homologies import RegularPathHomology
 from grpphati.filtrations import ShortestPathFiltration
-from grpphati.backends import EireneBackend
-from grpphati.optimisations import all_optimisations_serial
+from grpphati.backends import LoPHATBackend
+from grpphati.optimisations import all_optimisations
 from pprint import pprint
+
 
 pipe = make_grounded_pipeline(
     ShortestPathFiltration,
     RegularPathHomology,
-    backend=EireneBackend(),
-    optimisation_strat=all_optimisations_serial,
+    backend=LoPHATBackend(),
+    optimisation_strat=all_optimisations,
 )
 
 G = nx.DiGraph()
@@ -25,4 +25,3 @@ G.add_edges_from(
 )
 result = pipe(G)
 print(result.barcode)
-pprint(result.reps)

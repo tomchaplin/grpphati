@@ -16,7 +16,6 @@ pipe = make_grounded_pipeline(
     ShortestPathFiltration,
     RegularPathHomology,
     backend=EireneBackend(
-        runtime_path="/home/tom/Downloads/julia/julia-1.6.6/bin/julia",
         sysimage="/home/tom/Documents/dev/tda/grpphati/patched_sys.so",
     ),
     optimisation_strat=all_optimisations_serial,

@@ -31,6 +31,13 @@ class Result:
             birth_time = cols[idx].get_entrance_time()
             self.add_bar([birth_time, np.inf])
 
+    def add_unpaired_raw(self, unpaired_idxs, cols):
+        for idx in unpaired_idxs:
+            if cols[idx].dimension() != 1:
+                continue
+            birth_time = cols[idx].get_entrance_time()
+            self.add_bar([birth_time, np.inf])
+
     def extend(self, other_result):
         self.barcode.extend(other_result.barcode)
         self.reps.extend(other_result.reps)

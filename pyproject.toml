@@ -40,6 +40,9 @@ eirene = [
 persuit = [
   "persuit==0.1.0",
 ]
+lophat = [
+  "lophat==0.6.0",
+]
 
 [project.urls]
 Documentation = "https://github.com/tomchaplin/grpphati#readme"
@@ -68,9 +71,15 @@ features = ["eirene"]
 [tool.hatch.envs.persuit]
 features = ["persuit"]
 
+[tool.hatch.envs.lophat]
+features = ["lophat"]
+
+[tool.hatch.envs.all]
+features = ["eirene", "persuit", "lophat"]
+
 [[tool.hatch.envs.test.matrix]]
 python = ["37", "38", "39", "310", "311"]
-features = ["eirene"]
+features = ["eirene", "lophat"]
 
 [tool.hatch.metadata]
 allow-direct-references = true
