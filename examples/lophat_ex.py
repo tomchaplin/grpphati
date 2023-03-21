@@ -15,7 +15,7 @@ from pprint import pprint
 pipe = make_grounded_pipeline(
     ShortestPathFiltration,
     RegularPathHomology,
-    backend=LoPHATBackend(),
+    backend=LoPHATBackend(num_threads=4, min_chunk_len=10),
     optimisation_strat=all_optimisations,
 )
 
