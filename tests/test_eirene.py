@@ -14,18 +14,14 @@ from .utils import grounded_barcodes_equal
 GrPPH = make_grounded_pipeline(
     ShortestPathFiltration,
     RegularPathHomology,
-    backend=EireneBackend(
-        sysimage="patched_sys.so",
-    ),
+    backend=EireneBackend(sysimage="patched_sys.so"),
     optimisation_strat=all_optimisations_serial,
 )
 
 GrPdFlH = make_grounded_pipeline(
     ShortestPathFiltration,
     DirectedFlagComplexHomology,
-    backend=EireneBackend(
-        sysimage="patched_sys.so",
-    ),
+    backend=EireneBackend(sysimage="patched_sys.so"),
     optimisation_strat=component_empty_serial,
 )
 

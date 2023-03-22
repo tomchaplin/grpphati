@@ -15,9 +15,7 @@ from pprint import pprint
 pipe = make_grounded_pipeline(
     ShortestPathFiltration,
     RegularPathHomology,
-    backend=EireneBackend(
-        sysimage="/home/tom/Documents/dev/tda/grpphati/patched_sys.so",
-    ),
+    backend=EireneBackend(sysimage="patched_sys.so"),
     optimisation_strat=all_optimisations_serial,
 )
 
