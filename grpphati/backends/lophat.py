@@ -1,7 +1,13 @@
 from .abstract import Backend
-from lophat import compute_pairings, LoPhatOptions
 from grpphati.sparsifiers import Sparsifier, ListSparsifier
 from grpphati.results import Result
+
+try:
+    from lophat import compute_pairings, LoPhatOptions
+except ImportError:
+    _has_lophat = False
+else:
+    _has_lophat = True
 
 
 class LoPHATBackend(Backend):
@@ -14,6 +20,8 @@ class LoPHATBackend(Backend):
         self.sparsifier = sparsifier
         self.num_threads = num_threads
         self.min_chunk_len = min_chunk_len
+        if not _has_lophat:
+            raise ImportError("Optional dependency lophat required")
 
     def compute_ph(self, cols) -> Result:
         cols.sort(key=lambda col: (col.get_entrance_time(), col.dimension()))
