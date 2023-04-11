@@ -14,7 +14,7 @@ class RegularPathHomology(Homology):
         return cols
 
     @classmethod
-    def compute_map(cls, domain_cells, codomain_cells, vertex_map):
+    def compute_map(cls, domain_cells, codomain_cells, vertex_map = lambda x: x):
         cm = _cell_mapper(codomain_cells, vertex_map)
         return list(map(cm, domain_cells))
 
