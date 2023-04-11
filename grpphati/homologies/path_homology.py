@@ -1,3 +1,5 @@
+from grpphati.columns.edge import EdgeCol
+from grpphati.columns.node import NodeCol
 from .abstract import Homology
 from grpphati.columns import DoubleEdgeCol, DirectedTriangleCol, LongSquareCol
 
@@ -10,6 +12,11 @@ class RegularPathHomology(Homology):
         cols = _add_ls_collapsing_directed_triangles(cols, bridges, filtration)
         cols = _add_long_squares(cols, bridges)
         return cols
+
+    @classmethod
+    def compute_map(cls, domain_cells, codomain_cells, vertex_map):
+        cm = _cell_mapper(codomain_cells, vertex_map)
+        return list(map(cm, domain_cells))
 
 
 def _sorted_two_paths(filtration):
@@ -66,3 +73,126 @@ def _add_long_squares(cols, bridges):
                 )
             )
     return cols
+
+
+def _cell_mapper(codomain_cells, vertex_map):
+    # Builds up an index of the codomain cells for quick lookup of image
+    # index["nodes"] map from node columns to indexes
+    # index["edges"] map from edge columns to indexes
+    # index["double_edges"] map from double edge columns to indexes
+    # index["two_paths"][(s, t)] = {} for each endpoint pair (s, t)
+    # index["two_paths"][(s, t)]["base"] = first midpoint of every long square with endpoints (s, t)
+    # index["two_paths"][(s, t)]["nonbase"] = map from other midpoints to index of corresponding ls column
+    # index["two_paths"][(s, t)]["triangles"] = map from midpoints to index of corresponding triangle column
+    def _build_index():
+        index = {"double_edges": {}, "nodes": {}, "edges": {}, "two_paths": {}}
+
+        def _init_index(base_points):
+            if base_points not in index["two_paths"]:
+                index["two_paths"][base_points] = {
+                    "base": None,
+                    "nonbase": {},
+                    "triangles": {},
+                }
+
+        for idx, cell in enumerate(codomain_cells):
+            if isinstance(cell, LongSquareCol):
+                s = cell.start = cell.start
+                t = cell.end
+                _init_index((s, t))
+                mids = cell.midpoints
+                index["two_paths"][(s, t)]["base"] = mids[0]
+                index["two_paths"][(s, t)]["nonbase"][mids[1]] = idx
+            elif isinstance(cell, DirectedTriangleCol):
+                s = cell.two_path[0]
+                t = cell.two_path[2]
+                _init_index((s, t))
+                index["two_paths"][(s, t)]["triangles"][cell.two_path[1]] = idx
+            elif isinstance(cell, DoubleEdgeCol):
+                index["double_edges"][cell.forward_edge] = idx
+            elif isinstance(cell, NodeCol):
+                index["nodes"][cell.node] = idx
+            elif isinstance(cell, EdgeCol):
+                index["edges"][cell.edge] = idx
+            else:
+                raise ValueError("Received cells not produced by RegularPathHomology")
+        return index
+
+    index = _build_index()
+
+    def _map_node(cell):
+        return [index["nodes"][cell.node]]
+
+    def _map_edge(cell):
+        fu = vertex_map(cell.edge[0])
+        fv = vertex_map(cell.edge[1])
+        if fu == fv:
+            return []
+        else:
+            return [index["edges"][(fu, fv)]]
+
+    def _map_double_edge(cell):
+        fu = vertex_map(cell.forward_edge[0])
+        fv = vertex_map(cell.forward_edge[1])
+        if fu == fv:
+            return []
+        else:
+            return [index["double_edges"][(fu, fv)]]
+
+    def _map_triangle(cell):
+        fa = vertex_map(cell.two_path[0])
+        fb = vertex_map(cell.two_path[1])
+        fc = vertex_map(cell.two_path[2])
+        if fa == fb or fb == fc:
+            return []
+        elif fa == fc:
+            return [index["double_edges"][(fa, fb)]]
+        else:
+            return [index["two_paths"][(fa, fc)]["triangles"][fb]]
+
+    def _map_ls(cell):
+        fs = vertex_map(cell.start)
+        ft = vertex_map(cell.end)
+        fu = vertex_map(cell.midpoints[0])
+        fv = vertex_map(cell.midpoints[1])
+        if len(set([fs, ft, fu, fv])) < 4:
+            raise NotImplementedError(
+                "Currently only support maps which do not identify vertices of any long squares"
+            )
+        subindex = index["two_paths"][(fs, ft)]
+        columns = set()
+        for midpoint in [fu, fv]:
+            cols_to_add = set()
+            if midpoint == subindex["base"]:
+                cols_to_add = {subindex["triangles"][midpoint]}
+            elif midpoint in subindex["nonbase"]:
+                cols_to_add = {
+                    subindex["triangles"][subindex["base"]],
+                    subindex["nonbase"][midpoint],
+                }
+            elif midpoint in subindex["triangles"]:
+                cols_to_add = {subindex["triangles"][midpoint]}
+            else:
+                two_path = f"{fs} -> {midpoint} -> {ft}"
+                raise ValueError(
+                    f"Found a two-path which is not present in the image: {two_path}"
+                )
+            # Add columns with symmetric difference to match Z_2 addition
+            columns = columns.symmetric_difference(cols_to_add)
+        return sorted(columns)
+
+    def _get_image(cell):
+        if isinstance(cell, NodeCol):
+            return _map_node(cell)
+        elif isinstance(cell, EdgeCol):
+            return _map_edge(cell)
+        elif isinstance(cell, DoubleEdgeCol):
+            return _map_double_edge(cell)
+        elif isinstance(cell, DirectedTriangleCol):
+            return _map_triangle(cell)
+        elif isinstance(cell, LongSquareCol):
+            return _map_ls(cell)
+        else:
+            raise ValueError("Received cells not produced by RegularPathHomology")
+
+    return _get_image
