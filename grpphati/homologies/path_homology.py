@@ -139,6 +139,23 @@ def _cell_mapper(codomain_cells, vertex_map):
         else:
             return [index["double_edges"][(fu, fv)]]
 
+    def _map_two_path(endpoints, midpoint):
+        subindex = index["two_paths"][endpoints]
+        if midpoint == subindex["base"]:
+            return {subindex["triangles"][midpoint]}
+        elif midpoint in subindex["nonbase"]:
+            return {
+                subindex["triangles"][subindex["base"]],
+                subindex["nonbase"][midpoint],
+            }
+        elif midpoint in subindex["triangles"]:
+            return {subindex["triangles"][midpoint]}
+        else:
+            two_path = f"{endpoints[0]} -> {midpoint} -> {endpoints[1]}"
+            raise ValueError(
+                f"Found a two-path which is not present in the image: {two_path}"
+            )
+
     def _map_triangle(cell):
         fa = vertex_map(cell.two_path[0])
         fb = vertex_map(cell.two_path[1])
@@ -148,7 +165,7 @@ def _cell_mapper(codomain_cells, vertex_map):
         elif fa == fc:
             return [index["double_edges"][(fa, fb)]]
         else:
-            return [index["two_paths"][(fa, fc)]["triangles"][fb]]
+            return sorted(_map_two_path((fa, fc), fb))
 
     def _map_ls(cell):
         fs = vertex_map(cell.start)
@@ -159,24 +176,9 @@ def _cell_mapper(codomain_cells, vertex_map):
             raise NotImplementedError(
                 "Currently only support maps which do not identify vertices of any long squares"
             )
-        subindex = index["two_paths"][(fs, ft)]
         columns = set()
         for midpoint in [fu, fv]:
-            cols_to_add = set()
-            if midpoint == subindex["base"]:
-                cols_to_add = {subindex["triangles"][midpoint]}
-            elif midpoint in subindex["nonbase"]:
-                cols_to_add = {
-                    subindex["triangles"][subindex["base"]],
-                    subindex["nonbase"][midpoint],
-                }
-            elif midpoint in subindex["triangles"]:
-                cols_to_add = {subindex["triangles"][midpoint]}
-            else:
-                two_path = f"{fs} -> {midpoint} -> {ft}"
-                raise ValueError(
-                    f"Found a two-path which is not present in the image: {two_path}"
-                )
+            cols_to_add = _map_two_path((fs, ft), midpoint)
             # Add columns with symmetric difference to match Z_2 addition
             columns = columns.symmetric_difference(cols_to_add)
         return sorted(columns)
