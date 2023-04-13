@@ -41,7 +41,7 @@ persuit = [
   "persuit==0.1.0",
 ]
 lophat = [
-  "lophat==0.6.0",
+  "lophat==0.8.1",
 ]
 
 [project.urls]

@@ -13,7 +13,7 @@ else:
 class LoPHATBackend(Backend):
     def __init__(
         self,
-        sparsifier: Sparsifier = ListSparsifier(return_dimension=False),
+        sparsifier: Sparsifier = ListSparsifier(return_dimension=True),
         num_threads: int = 0,
         min_chunk_len: int = 0,
     ):
@@ -29,7 +29,7 @@ class LoPHATBackend(Backend):
         opts = LoPhatOptions(
             num_threads=self.num_threads, min_chunk_len=self.min_chunk_len
         )
-        diagram = compute_pairings(sparse_cols, opts)
+        diagram = compute_pairings(sparse_cols, options=opts)
         pairs = list(diagram.paired)
         pairs.sort()
         result = Result.empty()
