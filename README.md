@@ -259,13 +259,9 @@ See `examples/eirene_ex.py` for example usage
 - [ ] Add docstrings
 - [ ] Separate out entrance times?
 - [ ] Rephrase optimisations with decorators?
-- [x] Add Eirene backend
 - [ ] Benchmark Eirene vs PHAT
-- [x] Add Results class to handle backends with different return types
 - [ ] Setup Eirene notebook
-- [x] Allow Eirene backend to accept system image
-- [x] Write script for building `eirene_sys.so`
-- [x] Precompile necessary functions when building `eirene_sys.so
+- [ ] Update to latest LoPHAT version
 
 ## References
 

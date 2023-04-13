@@ -1,5 +1,7 @@
+import numpy as np
 from grpphati.columns.edge import EdgeCol
 from grpphati.columns.node import NodeCol
+from grpphati.filtrations.truncated import TruncatedFiltration
 from .abstract import Homology
 from grpphati.columns import DoubleEdgeCol, DirectedTriangleCol, LongSquareCol
 
