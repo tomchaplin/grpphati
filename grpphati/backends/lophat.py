@@ -3,7 +3,7 @@ from grpphati.sparsifiers import Sparsifier, ListSparsifier
 from grpphati.results import Result
 
 try:
-    from lophat import compute_pairings, LoPhatOptions
+    from lophat import compute_pairings_with_reps, LoPhatOptions
 except ImportError:
     _has_lophat = False
 else:
@@ -16,10 +16,12 @@ class LoPHATBackend(Backend):
         sparsifier: Sparsifier = ListSparsifier(return_dimension=True),
         num_threads: int = 0,
         min_chunk_len: int = 0,
+        with_reps: bool = True,
     ):
         self.sparsifier = sparsifier
         self.num_threads = num_threads
         self.min_chunk_len = min_chunk_len
+        self.with_reps = with_reps
         if not _has_lophat:
             raise ImportError("Optional dependency lophat required")
 
@@ -29,10 +31,12 @@ class LoPHATBackend(Backend):
         opts = LoPhatOptions(
             num_threads=self.num_threads, min_chunk_len=self.min_chunk_len
         )
-        diagram = compute_pairings(sparse_cols, options=opts)
-        pairs = list(diagram.paired)
-        pairs.sort()
+        diagram = compute_pairings_with_reps(sparse_cols, options=opts)
+        pairs_with_reps = list(zip(diagram.paired, diagram.paired_reps))
+        pairs_with_reps.sort(key=lambda pwr: pwr[0])
+        pairs = [pwr[0] for pwr in pairs_with_reps]
+        reps = [pwr[1] for pwr in pairs_with_reps]
         result = Result.empty()
-        result.add_paired(pairs, cols)
-        result.add_unpaired_raw(diagram.unpaired, cols)
+        result.add_paired(pairs, cols, reps=reps)
+        result.add_unpaired_raw(diagram.unpaired, cols, reps=diagram.unpaired_reps)
         return result

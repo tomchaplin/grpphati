@@ -1,6 +1,10 @@
 import numpy as np
 
 
+def _map_to_cols(rep, cols):
+    return [cols[idx] for idx in rep]
+
+
 class Result:
     def __init__(self, barcode=[], reps=[]):
         self.barcode = barcode
@@ -10,8 +14,8 @@ class Result:
         self.barcode.append(bar)
         self.reps.append(with_rep)
 
-    def add_paired(self, pairs, cols):
-        for [birth_idx, death_idx] in pairs:
+    def add_paired(self, pairs, cols, reps=None):
+        for bar_idx, [birth_idx, death_idx] in enumerate(pairs):
             birth_time = cols[birth_idx].get_entrance_time()
             death_time = cols[death_idx].get_entrance_time()
             # Don't add 0 persistence points?
@@ -21,22 +25,37 @@ class Result:
             # Only computing in dimension 1
             if dimension != 1:
                 continue
-            self.add_bar([birth_time, death_time])
+            if reps is not None:
+                self.add_bar(
+                    [birth_time, death_time], _map_to_cols(reps[bar_idx], cols)
+                )
+            else:
+                self.add_bar([birth_time, death_time])
 
-    def add_unpaired(self, pairs, cols):
+    def add_unpaired(self, pairs, cols, reps=None):
         all_paired_idxs = [idx for pair in pairs for idx in pair]
         dim_1_idxs = [idx for idx, col in enumerate(cols) if col.dimension() == 1]
         unpaired_idxs = [idx for idx in dim_1_idxs if idx not in all_paired_idxs]
-        for idx in unpaired_idxs:
+        for bar_idx, idx in enumerate(unpaired_idxs):
             birth_time = cols[idx].get_entrance_time()
-            self.add_bar([birth_time, np.inf])
+            if reps is not None:
+                self.add_bar(
+                    [birth_time, np.inf], with_rep=_map_to_cols(reps[bar_idx], cols)
+                )
+            else:
+                self.add_bar([birth_time, np.inf])
 
-    def add_unpaired_raw(self, unpaired_idxs, cols):
-        for idx in unpaired_idxs:
+    def add_unpaired_raw(self, unpaired_idxs, cols, reps=None):
+        for bar_idx, idx in enumerate(unpaired_idxs):
             if cols[idx].dimension() != 1:
                 continue
             birth_time = cols[idx].get_entrance_time()
-            self.add_bar([birth_time, np.inf])
+            if reps is not None:
+                self.add_bar(
+                    [birth_time, np.inf], with_rep=_map_to_cols(reps[bar_idx], cols)
+                )
+            else:
+                self.add_bar([birth_time, np.inf])
 
     def extend(self, other_result):
         self.barcode.extend(other_result.barcode)
