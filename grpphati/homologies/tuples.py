@@ -1,5 +1,6 @@
 from .abstract import Homology
 from grpphati.columns import DoubleEdgeCol, DirectedTriangleCol
+import numpy as np
 
 
 class OrderedTuplesHomology(Homology):
@@ -20,4 +21,5 @@ class OrderedTuplesHomology(Homology):
             for source, distances in sp_lengths.items()
             for midpoint, first_hop_dist in distances.items()
             for target, second_hop_dist in sp_lengths[midpoint].items()
+            if filtration.edge_time((source, target)) != np.inf
         ]

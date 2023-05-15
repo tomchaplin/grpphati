@@ -1,5 +1,6 @@
 from .abstract import Homology
 from grpphati.columns import DirectedTriangleCol
+import numpy as np
 
 
 class DirectedFlagComplexHomology(Homology):
@@ -18,5 +19,5 @@ class DirectedFlagComplexHomology(Homology):
             for source, distances in sp_lengths.items()
             for midpoint, first_hop_dist in distances.items()
             for target, second_hop_dist in sp_lengths[midpoint].items()
-            if source != target
+            if source != target and filtration.edge_time((source, target)) != np.inf
         ]
