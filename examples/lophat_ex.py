@@ -26,3 +26,14 @@ G.add_edges_from(
 result = pipe(G)
 pprint(result.barcode)
 pprint(result.reps)
+
+pipe2 = make_grounded_pipeline(
+    ShortestPathFiltration,
+    RegularPathHomology,
+    backend=LoPHATBackend(num_threads=4, min_chunk_len=10, with_reps=False),
+    optimisation_strat=all_optimisations,
+)
+
+result2 = pipe2(G)
+pprint(result2.barcode)
+pprint(result2.reps)
