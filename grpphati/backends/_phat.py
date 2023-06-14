@@ -1,3 +1,6 @@
+## This file is kept for historical reasons
+## We remove dependency on PHAT due to packaging issues
+
 from .abstract import Backend
 import phat
 from grpphati.sparsifiers import Sparsifier, ListSparsifier

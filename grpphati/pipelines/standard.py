@@ -10,9 +10,8 @@ from grpphati.optimisations import (
     component_appendage_empty,
     component_empty,
 )
-from grpphati.backends import Backend, PHATBackend
+from grpphati.backends import Backend, LoPHATBackend
 from typing import Type
-import phat
 
 from grpphati.truncations import cone_time
 
@@ -20,7 +19,7 @@ from grpphati.truncations import cone_time
 def make_standard_pipeline(
     filtration_map,
     homology_cls: Type[Homology],
-    backend: Backend = PHATBackend(phat.reductions.twist_reduction),
+    backend: Backend = LoPHATBackend(),
     optimisation_strat=None,
     truncation_strat=None,
 ):

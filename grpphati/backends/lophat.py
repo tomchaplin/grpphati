@@ -15,7 +15,7 @@ class LoPHATBackend(Backend):
         self,
         sparsifier: Sparsifier = ListSparsifier(return_dimension=True),
         num_threads: int = 0,
-        min_chunk_len: int = 0,
+        min_chunk_len: int = 10000,
         with_reps: bool = True,
     ):
         self.sparsifier = sparsifier
