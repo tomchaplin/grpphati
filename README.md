@@ -31,7 +31,7 @@ To get started straight away, save a copy of [this Google Colab notebook](https:
 To install, simply run
 
 ```shell
-pip install lophat
+pip install grpphati
 ```
 
 
