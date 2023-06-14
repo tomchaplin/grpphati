@@ -4,7 +4,7 @@
 
 <h1>GrPPHATI</h1>
 
-is a <b>Gr</b>ounded <b>P</b>ipeline <b>PHAT</b> <b>I</b>mplementation.
+is a <b>Gr</b>ounded <b>P</b>ipeline Lo<b>PHAT</b> <b>I</b>mplementation.
 
 [Overview](https://www.tomchaplin.xyz/research/2022-10-25-grounded-persistent-path-homology/)
 •
@@ -19,7 +19,7 @@ is a <b>Gr</b>ounded <b>P</b>ipeline <b>PHAT</b> <b>I</b>mplementation.
 The grounded pipeline, introduced in [[1]](#1), is a method for building stable, topological descriptors of weighted digraphs.
 GrPPHATI is a Python library for implementing descriptors derived from this pipeline.
 In particular, GrPPHATI provides default, optimised implementations of grounded persistent path homology (GrPPH) and grounded persistent directed flag complex homology (GrPdFlH).
-GrPPHATI builds the boundary matrix in Python, converts it into a sparse format and then employs the persistent homology algorithm toolkit (PHAT) [[2]](#2) to perform the persistence calculation in C++.
+GrPPHATI builds the boundary matrix in Python, converts it into a sparse format and then employs [LoPHAT](https://github.com/tomchaplin/lophat) to perform the persistence calculation in C++.
 
 > **Note**
 > Due to its focus on GrPPH, this library only computes homology in degree 1.
@@ -28,17 +28,12 @@ GrPPHATI builds the boundary matrix in Python, converts it into a sparse format 
 
 To get started straight away, save a copy of [this Google Colab notebook](https://colab.research.google.com/drive/1WUuiShZcXGb8n8kxjIoRcybYEM5av31O?usp=sharing) to your drive.
 
-Due to [issues](https://github.com/xoltar/phat/issues/4) with the PyPI packaging of `phat`, GrPPHATI is currently not available as a PyPI package.
-Instead, please install as a direct reference to the repository:
+To install, simply run
 
-```
-$ pip install git+https://github.com/tomchaplin/grpphati.git
+```shell
+pip install lophat
 ```
 
-> **Warning**
-> Some package managers (in particular `poetry`) will fail to build the `phat` dependency, since it uses the `setup.py install` build method.
-> At the time of writing, installing as a direct reference with `hatch` is known to work.
-> As a fallback, enter the shell of your virtual environment, and install via `pip`.
 
 ## Basic Usage
 
@@ -179,9 +174,8 @@ For illustrative examples, see the contents of `grpphati.optimisations`.
 
 ### Backends
 
-By default, GrPPHATI uses PHAT to do the core persistence computation.
-However, PHAT does not compute representatives.
-As such, an alternative backend, relying on Eirene.jl [[3]](#3) is also provided.
+By default, GrPPHATI uses LoPHAT to do the core persistence computation.
+An alternative backend, relying on Eirene.jl [[3]](#3) is also provided.
 Here is a rough guide to setting this up:
 
 1. Install Julia 1.6 [(needed for Eirene compatibility)](https://github.com/Eetion/Eirene.jl/issues/47). In the following assume the binary for Julia 1.6 is at `/path/to/julia` - it is important that the filename is `julia`.
