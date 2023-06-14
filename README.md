@@ -19,7 +19,7 @@ is a <b>Gr</b>ounded <b>P</b>ipeline Lo<b>PHAT</b> <b>I</b>mplementation.
 The grounded pipeline, introduced in [[1]](#1), is a method for building stable, topological descriptors of weighted digraphs.
 GrPPHATI is a Python library for implementing descriptors derived from this pipeline.
 In particular, GrPPHATI provides default, optimised implementations of grounded persistent path homology (GrPPH) and grounded persistent directed flag complex homology (GrPdFlH).
-GrPPHATI builds the boundary matrix in Python, converts it into a sparse format and then employs [LoPHAT](https://github.com/tomchaplin/lophat) to perform the persistence calculation in C++.
+GrPPHATI builds the boundary matrix in Python, converts it into a sparse format and then employs [LoPHAT](https://github.com/tomchaplin/lophat) to perform the persistence calculation in Rust.
 
 > **Note**
 > Due to its focus on GrPPH, this library only computes homology in degree 1.
