@@ -29,7 +29,7 @@ dependencies = [
     "networkx~=2.8.8",
     "numpy~=1.24.1",
     "joblib~=1.2.0",
-    "phat @ git+https://github.com/xoltar/phat"
+    "lophat==0.9.2"
 ]
 dynamic = ["version"]
 
@@ -39,9 +39,6 @@ eirene = [
 ]
 persuit = [
   "persuit==0.1.0",
-]
-lophat = [
-  "lophat==0.9.2",
 ]
 
 [project.urls]
@@ -71,15 +68,12 @@ features = ["eirene"]
 [tool.hatch.envs.persuit]
 features = ["persuit"]
 
-[tool.hatch.envs.lophat]
-features = ["lophat"]
-
 [tool.hatch.envs.all]
-features = ["eirene", "persuit", "lophat"]
+features = ["eirene", "persuit"]
 
 [[tool.hatch.envs.test.matrix]]
 python = ["37", "38", "39", "310", "311"]
-features = ["eirene", "lophat"]
+features = ["eirene"]
 
 [tool.hatch.metadata]
 allow-direct-references = true

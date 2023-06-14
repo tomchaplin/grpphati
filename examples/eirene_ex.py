@@ -8,7 +8,7 @@ import time
 from grpphati.pipelines.grounded import make_grounded_pipeline
 from grpphati.homologies import RegularPathHomology
 from grpphati.filtrations import ShortestPathFiltration
-from grpphati.backends import EireneBackend, PHATBackend
+from grpphati.backends import EireneBackend
 from grpphati.optimisations import all_optimisations_serial
 from pprint import pprint
 
@@ -21,10 +21,9 @@ pipe = make_grounded_pipeline(
 
 print("Done setting up Eirene")
 
-phat_pipe = make_grounded_pipeline(
+lophat_pipe = make_grounded_pipeline(
     ShortestPathFiltration,
     RegularPathHomology,
-    backend=PHATBackend(),
     optimisation_strat=all_optimisations_serial,
 )
 
@@ -54,7 +53,7 @@ G3 = nx.disjoint_union(G3_1, G3_2)
 print(len(out.barcode))
 print(out.reps[0])
 print(elap)
-(out, elap) = timed(lambda: phat_pipe(G3))
-out = phat_pipe(G3)
+(out, elap) = timed(lambda: lophat_pipe(G3))
+out = lophat_pipe(G3)
 print(len(out.barcode))
 print(elap)
