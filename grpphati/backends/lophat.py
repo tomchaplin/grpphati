@@ -26,7 +26,8 @@ class LoPHATBackend(Backend):
             raise ImportError("Optional dependency lophat required")
 
     def compute_ph(self, cols) -> Result:
-        cols.sort(key=lambda col: (col.get_entrance_time(), col.dimension()))
+        # cols.sort(key=lambda col: (col.get_entrance_time(), col.dimension()))
+        cols.sort(key=lambda col: (col.dimension(), col.get_entrance_time()))
         sparse_cols = self.sparsifier(cols)
         opts = LoPhatOptions(
             num_threads=self.num_threads, min_chunk_len=self.min_chunk_len
