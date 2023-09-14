@@ -35,7 +35,7 @@ class StandardGroundedFiltration(Filtration):
         return 0 if self.G.has_node(node) else self.filtration.node_time(node)
 
     def edge_time(self, edge):
-        return 0 if self.G.has_edge(edge) else self.filtration.edge_time(edge)
+        return 0 if self.G.has_edge(*edge) else self.filtration.edge_time(edge)
 
     def node_iter(self):
         return [(node, 0) for node in self.G.nodes] + [
